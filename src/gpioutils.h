@@ -3,6 +3,7 @@
 #include <Arduino.h>
 
 #include "dejitter/dejitter.h"
+#include "schmitt/schmitt.h"
 
 /**
  * Convert an analogRead() 10-bit value to 8-bit with rounding
