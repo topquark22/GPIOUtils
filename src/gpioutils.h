@@ -2,6 +2,7 @@
 
 #include <Arduino.h>
 
+#include "debounce/debounce.h"
 #include "dejitter/dejitter.h"
 #include "schmitt/schmitt.h"
 
