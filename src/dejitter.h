@@ -9,7 +9,7 @@ class Dejitter {
 public:
   Dejitter(uint8_t pin);
 
-  int read();  // TODO fix return type to that of analogRead()
+  int read();
 
 private:
   uint8_t pin_;
