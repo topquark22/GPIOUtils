@@ -1,13 +1,16 @@
 #include <gpioutils.h>
 
-TimedOutput led(13);
+TimedOutput led(5);
 
 void setup() {
   led.begin();
 }
 
 void loop() {
-  led.pulse(150);
-  delay(1000);
-  led.read();
+  led.pulse(500);
+  bool v = led.read();
+  while (HIGH == v) {
+    v = led.read();
+  }
+  delay(1500);
 }
