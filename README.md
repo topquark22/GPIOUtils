@@ -7,6 +7,9 @@ It is intentionally **not a framework**.
 Each component does *one thing*, is easy to reason about, and composes cleanly
 with the others.
 
+📘 **Examples and usage:**  
+See the full examples index here → [examples/README.md](examples/README.md)
+
 ---
 
 ## Design philosophy
@@ -45,6 +48,8 @@ GPIOUtils/
   src/
     gpioutils.h          // the only public header
     impl/                // internal headers and sources
+  examples/
+    README.md            // example index (recommended starting point)
 ```
 
 Users should **only include**:
@@ -53,225 +58,39 @@ Users should **only include**:
 #include <gpioutils.h>
 ```
 
-All headers under `impl/` are considered private.
-
 ---
 
 ## Components
 
 ### Analog input utilities
 
-#### Dejitter
-Suppresses tiny ADC fluctuations by holding the last stable value until the
-input changes by more than a configurable deadband.
-
-- Owns an analog pin
-- Stateful
-- Uses `begin()`
-
-```cpp
-Dejitter pot(A0, 1);
-
-void setup() {
-  pot.begin();
-}
-
-void loop() {
-  int v = pot.read();
-}
-```
-
----
-
-#### Schmitt
-Analog Schmitt trigger with hysteresis. Returns a boolean output with clean
-transitions.
-
-- Owns an analog pin
-- Configurable hysteresis
-- Uses `begin()`
-
-```cpp
-Schmitt level(A0, 480, 540);
-
-void setup() {
-  level.begin();
-}
-
-void loop() {
-  if (level.read()) {
-    // signal is high
-  }
-}
-```
-
----
+- **Dejitter** — suppresses small ADC flicker using a deadband
+- **Schmitt** — analog Schmitt trigger with hysteresis
 
 ### Digital input utilities
 
-#### Debounce
-Debounces a digital input (buttons, switches).
+- **Debounce** — debounced digital input with edge events
+- **EdgeDetector** — edge detection without debouncing
 
-- Owns a digital pin
-- Time-based debounce
-- Provides edge events (`rose()`, `fell()`)
+### Event / value utilities (no GPIO ownership)
 
-```cpp
-Debounce btn(2, INPUT_PULLUP, 25);
-
-void setup() {
-  btn.begin();
-}
-
-void loop() {
-  btn.read();
-  if (btn.fell()) {
-    // button pressed (active-low)
-  }
-}
-```
-
----
-
-#### EdgeDetector
-Detects rising and falling edges on a digital input **without debouncing**.
-
-- Owns a digital pin
-- No time filtering
-
-```cpp
-EdgeDetector ed(3, INPUT);
-
-void setup() {
-  ed.begin();
-}
-
-void loop() {
-  ed.read();
-  if (ed.rose()) {
-    // rising edge
-  }
-}
-```
-
----
-
-### Event- and value-driven utilities (no GPIO ownership)
-
-These classes do **not** read or write pins.
-They operate on events or values and compose with the GPIO-owning components.
-
----
-
-#### OneShotEvent
-Event-driven one-shot (monostable).
-
-- Triggered explicitly by an event
-- Output stays true for a fixed duration
-- Non-blocking
-
-```cpp
-OneShotEvent pulse(120);
-
-void loop() {
-  if (event) pulse.trigger();
-  bool active = pulse.read();
-}
-```
-
----
-
-#### Toggle
-Event-driven toggle latch.
-
-- Each trigger flips the internal state
-- Useful for press-to-toggle behavior
-
-```cpp
-Toggle latch;
-
-void loop() {
-  if (event) latch.trigger();
-  bool on = latch.read();
-}
-```
-
----
-
-#### RateLimiter
-Limits how fast a value can change over time (slew limiter).
-
-- Not an averaging filter
-- Preserves steps but spreads them over time
-- Uses `begin()` for time initialization
-
-```cpp
-RateLimiter lim(500.0f, 800.0f);
-
-void setup() {
-  lim.begin();
-}
-
-void loop() {
-  float y = lim.read(target);
-}
-```
-
----
+- **OneShotEvent** — event-driven monostable
+- **Toggle** — event-driven toggle latch
+- **RateLimiter** — slew limiter for values
 
 ### Digital output utilities
 
-#### TimedOutput
-Non-blocking timed digital output.
-
-- Owns an output pin
-- Can be turned on/off
-- Can be pulsed for a fixed duration
-- Uses `begin()`
-
-```cpp
-TimedOutput led(13);
-
-void setup() {
-  led.begin();
-}
-
-void loop() {
-  if (event) led.pulse(120);
-  led.read();
-}
-```
-
-Supports:
-- active-high or active-low outputs
-- retriggerable pulses
+- **TimedOutput** — non-blocking timed digital output
 
 ---
 
-## Composition patterns (documented, not hard-coded)
+## Inline helper functions
 
-Some common patterns are intentionally **not implemented as separate classes**
-because they fall naturally out of composition.
+Available via `#include <gpioutils.h>`:
 
-### Pulse stretcher
-```
-Debounce → OneShotEvent → TimedOutput
-```
-
-### Toggle-on-press
-```
-Debounce → Toggle
-```
-
-### Smoothed analog control
-```
-analog pin → Dejitter → RateLimiter → PWM
-```
-
-### Thresholded analog event
-```
-analog pin → Schmitt → OneShotEvent
-```
+- `adcToU8()` — ADC → 8-bit conversion with rounding
+- `adcToFloat()` — ADC → normalized float
+- `adcToFloat(min, max)` — ADC → arbitrary float range
 
 ---
 
@@ -286,3 +105,8 @@ GPIOUtils provides:
 It is designed to quietly remove the small irritations that otherwise clutter
 embedded GPIO code.
 
+---
+
+## License
+
+(Insert your chosen license here.)
