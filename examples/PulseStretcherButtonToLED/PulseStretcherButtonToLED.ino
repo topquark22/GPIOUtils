@@ -1,17 +1,50 @@
+/*
+  PulseStretcherButtonToLED
+
+  Demonstrates a pulse stretcher built by composition:
+
+      Debounce → OneShotEvent → TimedOutput
+
+  A momentary button press produces a visible LED pulse
+  of fixed duration, without delay().
+
+  Wiring:
+    - Button between pin 2 and GND (INPUT_PULLUP)
+    - LED on pin 13 (built-in LED on many boards)
+*/
+
 #include <gpioutils.h>
 
-Debounce btn(2, INPUT_PULLUP, 25);
-OneShotEvent pulse(120);
-TimedOutput led(13);
+constexpr uint8_t BUTTON_PIN = 2;
+constexpr uint8_t LED_PIN    = 13;
+constexpr uint32_t DEBOUNCE_MS = 25;
+constexpr uint32_t PULSE_MS    = 150;
+
+Debounce     button(BUTTON_PIN, INPUT_PULLUP, DEBOUNCE_MS);
+OneShotEvent pulse(PULSE_MS);
+TimedOutput  led(LED_PIN);
 
 void setup() {
-  btn.begin();
+  button.begin();
   led.begin();
 }
 
 void loop() {
-  btn.read();
-  if (btn.fell()) pulse.trigger();
-  if (pulse.read()) led.on();
-  else led.off();
+  // Update input
+  button.read();
+
+  // Trigger one-shot on clean button press (active-low → falling edge)
+  if (button.fell()) {
+    pulse.trigger();
+  }
+
+  // Drive LED from one-shot state
+  if (pulse.read()) {
+    led.on();
+  } else {
+    led.off();
+  }
+
+  // Maintain timed output
+  led.read();
 }
