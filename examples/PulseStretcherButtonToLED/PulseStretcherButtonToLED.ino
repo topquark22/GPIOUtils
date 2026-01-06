@@ -10,7 +10,7 @@
 
   Wiring:
     - Button between pin 2 and GND (INPUT_PULLUP)
-    - LED on pin 13 (built-in LED on many boards)
+    - LED on pin 5
 */
 
 #include <gpioutils.h>
