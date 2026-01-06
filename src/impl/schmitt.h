@@ -1,34 +1,30 @@
 #pragma once
 #include <Arduino.h>
 
-/**
- * @brief Schmitt trigger for an analog input.
- *
- * Reads an analog input and returns a boolean with hysteresis:
- * - Rising threshold:  value >= th_hi -> output becomes true
- * - Falling threshold: value <= th_lo -> output becomes false
- * - Between thresholds: output holds previous state
- */
+#ifndef GPIOUTILS_PUBLIC_INCLUDE
+#warning "Include <gpioutils.h> instead of including impl/* directly."
+#endif
+
 class Schmitt {
 public:
-  // Backward-friendly: explicit thresholds in ADC counts (0..1023)
+  // Tag type to disambiguate (center, hysteresis) construction.
+  struct CenterHysteresisTag { explicit constexpr CenterHysteresisTag() = default; };
+  static constexpr CenterHysteresisTag CenterHysteresis{};
+
+  // Threshold-based constructor (recommended / unambiguous)
   Schmitt(uint8_t pin, int th_lo, int th_hi, bool initial_state = false);
 
-  // Convenience: specify center + hysteresis width (in ADC counts)
-  // Example: center=512, hyst=20 => th_lo=502, th_hi=522
-  Schmitt(uint8_t pin, int center, int hysteresis, bool initial_state = false);
+  // Center/hysteresis constructor (tagged to avoid overload collision)
+  Schmitt(uint8_t pin, int center, int hysteresis,
+          CenterHysteresisTag /*tag*/, bool initial_state = false);
 
-  bool read();          // reads ADC, updates internal state, returns state
-  bool state() const { return state_; }  // returns current state without reading
-
-  int last_adc() const { return last_adc_; }
+  void begin();
+  bool read();
+  bool state() const { return state_; }
 
 private:
-  void init_(uint8_t pin, int lo, int hi, bool initial_state);
-
   uint8_t pin_;
   int th_lo_;
   int th_hi_;
   bool state_;
-  int last_adc_;
 };

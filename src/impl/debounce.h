@@ -1,6 +1,10 @@
 #pragma once
 #include <Arduino.h>
 
+#ifndef GPIOUTILS_PUBLIC_INCLUDE
+#warning "Include <gpioutils.h> instead of including impl/* directly."
+#endif
+
 class Debounce {
 public:
   Debounce(uint8_t pin, uint8_t mode, uint32_t debounce_ms);

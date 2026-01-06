@@ -2,6 +2,10 @@
 
 #include <Arduino.h>
 
+#ifndef GPIOUTILS_PUBLIC_INCLUDE
+#warning "Include <gpioutils.h> instead of including impl/* directly."
+#endif
+
 /**
  * @brief Simple ADC deadband (dejitter) filter for potentiometer inputs.
  *
