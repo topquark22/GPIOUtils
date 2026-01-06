@@ -1,6 +1,8 @@
 #include <gpioutils.h>
 
-EdgeDetector ed(3, INPUT);
+const uint8_t PIN_IN = 3;
+
+EdgeDetector ed(PIN_IN, INPUT_PULLUP);
 
 void setup() {
   Serial.begin(115200);
