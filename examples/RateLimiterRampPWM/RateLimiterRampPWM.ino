@@ -7,7 +7,6 @@ Dejitter pot(POT_PIN, 1);
 RateLimiter lim(300.0f, 600.0f);
 
 void setup() {
-  pot.begin();
   lim.begin();
   pinMode(LED_PIN, OUTPUT);
 }
