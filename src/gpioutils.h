@@ -1,28 +1,69 @@
 #pragma once
+/*
+  GPIOUtils - public umbrella header
+
+  Users should include ONLY this file:
+
+      #include <gpioutils.h>
+
+  All implementation headers live under src/impl/.
+*/
+
+#define GPIOUTILS_PUBLIC_INCLUDE 1
 
 #include <Arduino.h>
 
-#include "debounce/debounce.h"
-#include "dejitter/dejitter.h"
-#include "schmitt/schmitt.h"
+//
+// Analog input utilities
+//
+#include "impl/dejitter.h"
+#include "impl/schmitt.h"
+
+//
+// Digital input utilities
+//
+#include "impl/debounce.h"
+#include "impl/edgedetector.h"
+
+//
+// Event / value-driven utilities (no GPIO ownership)
+//
+#include "impl/oneshot_event.h"
+#include "impl/toggle.h"
+#include "impl/ratelimiter.h"
+
+//
+// Digital output utilities
+//
+#include "impl/timedoutput.h"
+
+//
+// -----------------------------------------------------------------------------
+// Inline utility helpers
+// -----------------------------------------------------------------------------
 
 /**
- * Convert an analogRead() 10-bit value to 8-bit with rounding
+ * @brief Convert a 10-bit ADC reading (0..1023) to an 8-bit value (0..255),
+ *        with proper rounding.
  */
-inline uint8_t adc10to8(int v) {
-  return (v * 255 + 511) / 1023;
+static inline uint8_t adcToU8(uint16_t adc)
+{
+  // Scale by 255/1023 with rounding
+  return (adc * 255u + 511u) / 1023u;
 }
 
 /**
- * Convert an analogRead() 10-bit value to float in range 0.0 .. 1.0
+ * @brief Convert a 10-bit ADC reading (0..1023) to a float in the range [0.0, 1.0].
  */
-inline float adc10toFloat(int v) {
-  return v * (1.0f / 1023.0f);
+static inline float adcToFloat(uint16_t adc)
+{
+  return adc * (1.0f / 1023.0f);
 }
 
 /**
- * Convert an analogRead() 10-bit value to float with range spec
+ * @brief Convert a 10-bit ADC reading (0..1023) to a float in an arbitrary range.
  */
-inline float adc10toFloat(int v, float min, float max) {
-  return min + (max - min) * (v * (1.0f / 1023.0f));
+static inline float adcToFloat(uint16_t adc, float minVal, float maxVal)
+{
+  return minVal + (maxVal - minVal) * (adc * (1.0f / 1023.0f));
 }

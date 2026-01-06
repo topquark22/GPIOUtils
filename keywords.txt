@@ -1,0 +1,39 @@
+#######################################
+# Syntax Coloring Map For GPIOUtils
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Dejitter            KEYWORD1
+Schmitt             KEYWORD1
+Debounce            KEYWORD1
+EdgeDetector        KEYWORD1
+OneShotEvent        KEYWORD1
+Toggle              KEYWORD1
+RateLimiter         KEYWORD1
+TimedOutput         KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin               KEYWORD2
+read                KEYWORD2
+rose                KEYWORD2
+fell                KEYWORD2
+trigger             KEYWORD2
+pulse               KEYWORD2
+on                  KEYWORD2
+off                 KEYWORD2
+is_on               KEYWORD2
+is_pulsing          KEYWORD2
+state               KEYWORD2
+toggled             KEYWORD2
+value               KEYWORD2
+set_value           KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
