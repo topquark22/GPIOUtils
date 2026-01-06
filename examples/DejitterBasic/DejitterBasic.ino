@@ -1,7 +1,7 @@
 #include <gpioutils.h>
 
 constexpr uint8_t POT_PIN = A0;
-constexpr int DEAD_BAND = 1;
+constexpr int DEAD_BAND = 2;
 
 Dejitter pot(POT_PIN, DEAD_BAND);
 
