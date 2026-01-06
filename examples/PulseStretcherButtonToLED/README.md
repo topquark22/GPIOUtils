@@ -19,7 +19,7 @@ A button press may be very short, but you want a visible output pulse.
 ## Hardware setup
 
 - Button on **pin 2** (INPUT_PULLUP)
-- LED on **pin 13**
+- LED on **pin 5**
 
 ---
 
