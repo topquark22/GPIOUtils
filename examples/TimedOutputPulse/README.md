@@ -15,7 +15,7 @@ Turning an output on for a fixed time without blocking code execution.
 
 ## Hardware setup
 
-- LED connected to **pin 13** (or built-in LED)
+- LED connected to **pin 5**
 
 ---
 
