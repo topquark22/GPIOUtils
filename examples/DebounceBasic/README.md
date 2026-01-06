@@ -25,7 +25,7 @@ Without debouncing, a single press can be interpreted as many presses.
 ## Hardware setup
 
 - Pushbutton between **digital pin 2** and **GND**
-- LED on **digital pin 13** (built-in LED on many Arduino boards)
+- LED on **digital pin 5**
 
 The button uses the internal pull-up resistor (`INPUT_PULLUP`), so:
 - released = HIGH
