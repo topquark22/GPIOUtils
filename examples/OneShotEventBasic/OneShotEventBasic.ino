@@ -1,10 +1,11 @@
 #include <gpioutils.h>
 
-OneShotEvent pulse(200);
+OneShotEvent pulse(1000);
 
 void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, LOW);
   Serial.begin(115200);
-  while (!Serial) {}
 }
 
 void loop() {
@@ -14,5 +15,8 @@ void loop() {
   }
   if (pulse.read()) {
     Serial.println("Pulse active");
+    digitalWrite(LED_BUILTIN, HIGH);
+  } else {
+    digitalWrite(LED_BUILTIN, LOW);
   }
 }
