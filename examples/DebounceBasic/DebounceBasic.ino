@@ -7,8 +7,8 @@ constexpr uint32_t DEBOUNCE_MS = 25;
 Debounce button(BUTTON_PIN, INPUT_PULLUP, DEBOUNCE_MS);
 
 void setup() {
-  button.begin();
   pinMode(LED_PIN, OUTPUT);
+  button.begin();
 }
 
 void loop() {
