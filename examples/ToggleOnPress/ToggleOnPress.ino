@@ -2,7 +2,7 @@
 
 Debounce btn(2, INPUT_PULLUP, 25);
 Toggle latch;
-constexpr uint8_t LED_PIN = 13;
+constexpr uint8_t LED_PIN = 5;
 
 void setup() {
   btn.begin();

@@ -17,7 +17,7 @@ You want a button to toggle a state instead of acting momentarily.
 ## Hardware setup
 
 - Button on **pin 2** (INPUT_PULLUP)
-- LED on **pin 13**
+- LED on **pin 5**
 
 ---
 
