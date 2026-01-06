@@ -104,9 +104,3 @@ GPIOUtils provides:
 
 It is designed to quietly remove the small irritations that otherwise clutter
 embedded GPIO code.
-
----
-
-## License
-
-(Insert your chosen license here.)
