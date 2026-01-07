@@ -17,7 +17,7 @@ void RateLimiter::begin() {
 }
 
 float RateLimiter::read(float input) {
-  const uint32_t now = millis();
+  const unsigned long now = millis();
 
   // First call safety if begin() wasn't called
   if (!started_) {
@@ -27,10 +27,10 @@ float RateLimiter::read(float input) {
     return y_;
   }
 
-  const uint32_t dt_ms = now - last_ms_;
+  const unsigned long dt_ms = now - last_ms_;
   last_ms_ = now;
 
-  const float dt = dt_ms * 0.001f; // seconds
+  const float dt = dt_ms * 1.0e-3f; // seconds
 
   const float err = input - y_;
   if (err == 0.0f || dt <= 0.0f) return y_;
