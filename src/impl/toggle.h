@@ -24,6 +24,20 @@ public:
   void begin() {} // symmetry only
 
   /**
+   * @brief Set the state.
+   * @param new_state New state.
+   * @return True if the state changed.
+   */
+  bool set(bool new_state) {
+    if (state_ != new_state) {
+      state_ = new_state;
+      toggled_ = true;
+      return true;
+    }
+    return false;
+  } 
+
+  /**
    * @brief Flip the state.
    */
   void trigger() {
@@ -32,8 +46,7 @@ public:
   }
 
   /**
-   * @brief Return current state.
-   * Clears the toggled() flag.
+   * @brief Return current state. Reset toggled() flag.
    */
   bool read() {
     toggled_ = false;
