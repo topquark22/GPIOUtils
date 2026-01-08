@@ -1,6 +1,6 @@
 #include <gpioutils.h>
 
-static const uint8_t LED_PIN = LED_BUILTIN;
+static const uint8_t LED_PIN = 5;
 
 // 200 ms ON, 800 ms OFF
 PulseGenerator pg(200, 800, true);

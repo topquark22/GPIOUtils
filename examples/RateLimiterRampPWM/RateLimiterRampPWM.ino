@@ -1,7 +1,7 @@
 #include <gpioutils.h>
 
 constexpr uint8_t POT_PIN = A0;
-constexpr uint8_t LED_PIN = 9;
+constexpr uint8_t LED_PIN = 5;
 
 Dejitter pot(POT_PIN, 1);
 RateLimiter lim(300.0f, 600.0f);
