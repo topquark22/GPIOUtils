@@ -1,117 +1,81 @@
 # GPIOUtils Examples
 
-This directory contains small, focused Arduino sketches demonstrating how to use
-the components in **GPIOUtils** and how to **compose** them into useful behaviors.
+This directory contains small, focused example sketches demonstrating the
+individual building blocks provided by GPIOUtils.
 
-All sketches include the umbrella header:
+Each example lives in its own subdirectory and is intended to be read,
+compiled, and modified independently.
 
-```cpp
-#include <gpioutils.h>
-```
+Pin conventions used by all examples (unless noted):
+- POT_PIN    = A0
+- BUTTON_PIN = 2
+- SIGNAL_PIN = 3
+- LED_PIN    = 5
 
-## Analog input examples
+---
 
-### AnalogCalibratorBasic
-- 📄 [README](AnalogCalibratorBasic/README.md)
-- 🧪 Sketch: `AnalogCalibratorBasic/AnalogCalibratorBasic.ino`
+## Digital Inputs
 
-### AnalogDejitterRead
-- 📄 [README](AnalogDejitterRead/README.md)
-- 🧪 Sketch: `AnalogDejitterRead/AnalogDejitterRead.ino`
+Examples related to buttons, switches, and digital signal conditioning.
 
-### DejitterBasic
-- 📄 [README](DejitterBasic/README.md)
-- 🧪 Sketch: `DejitterBasic/DejitterBasic.ino`
+- [`DebounceBasic/`](DebounceBasic)  
+  Basic debouncing of a mechanical button.
 
-### SchmittAnalogThreshold
-- 📄 [README](SchmittAnalogThreshold/README.md)
-- 🧪 Sketch: `SchmittAnalogThreshold/SchmittAnalogThreshold.ino`
+- [`GlitchFilterBasic/`](GlitchFilterBasic)  
+  Rejects short digital glitches while allowing real transitions.
 
-## Digital input examples
+- [`LongPressDetectorBasic/`](LongPressDetectorBasic)  
+  Detects when a button has been held longer than a threshold.
 
-### DebounceBasic
-- 📄 [README](DebounceBasic/README.md)
-- 🧪 Sketch: `DebounceBasic/DebounceBasic.ino`
+- [`ToggleOnPress/`](ToggleOnPress)  
+  Toggle a state each time a button is pressed.
 
-### EdgeDetectorBasic
-- 📄 [README](EdgeDetectorBasic/README.md)
-- 🧪 Sketch: `EdgeDetectorBasic/EdgeDetectorBasic.ino`
+---
 
-### GlitchFilterBasic
-- 📄 [README](GlitchFilterBasic/README.md)
-- 🧪 Sketch: `GlitchFilterBasic/GlitchFilterBasic.ino`
+## Timing & Events
 
-## Event / timing / value utilities
+Examples demonstrating non-blocking time-based behavior.
 
-### AutoRepeatBasic
-- 📄 [README](AutoRepeatBasic/README.md)
-- 🧪 Sketch: `AutoRepeatBasic/AutoRepeatBasic.ino`
+- [`OneShotEventBasic/`](OneShotEventBasic)  
+  Generate a single timed pulse in response to an event.
 
-### LongPressDetectorBasic
-- 📄 [README](LongPressDetectorBasic/README.md)
-- 🧪 Sketch: `LongPressDetectorBasic/LongPressDetectorBasic.ino`
+- [`PeriodicTimerBlink/`](PeriodicTimerBlink)  
+  Use a periodic timer instead of `delay()`.
 
-### OneShotEventBasic
-- 📄 [README](OneShotEventBasic/README.md)
-- 🧪 Sketch: `OneShotEventBasic/OneShotEventBasic.ino`
+- [`PulseGeneratorBlink/`](PulseGeneratorBlink)  
+  Generate a square-wave blink pattern without blocking.
 
-### PeriodicTimerBlink
-- 📄 [README](PeriodicTimerBlink/README.md)
-- 🧪 Sketch: `PeriodicTimerBlink/PeriodicTimerBlink.ino`
+- [`SoftWatchdogBasic/`](SoftWatchdogBasic)  
+  Software watchdog that detects when expected activity stops.
 
-### RateLimiterRampPWM
-- 📄 [README](RateLimiterRampPWM/README.md)
-- 🧪 Sketch: `RateLimiterRampPWM/RateLimiterRampPWM.ino`
+---
 
-### ToggleOnPress
-- 📄 [README](ToggleOnPress/README.md)
-- 🧪 Sketch: `ToggleOnPress/ToggleOnPress.ino`
+## Analog Processing
 
-## Digital output examples
+Examples for stabilizing and shaping analog values.
 
-### PulseGeneratorBlink
-- 📄 [README](PulseGeneratorBlink/README.md)
-- 🧪 Sketch: `PulseGeneratorBlink/PulseGeneratorBlink.ino`
+- [`DejitterBasic/`](DejitterBasic)  
+  Suppress small analog jitter while preserving full-range motion.
 
-### PulseStretcherButtonToLED
-- 📄 [README](PulseStretcherButtonToLED/README.md)
-- 🧪 Sketch: `PulseStretcherButtonToLED/PulseStretcherButtonToLED.ino`
+- [`AnalogCalibratorBasic/`](AnalogCalibratorBasic)  
+  Map raw ADC values using calibrated endpoints.
 
-### TimedOutputPulse
-- 📄 [README](TimedOutputPulse/README.md)
-- 🧪 Sketch: `TimedOutputPulse/TimedOutputPulse.ino`
+- [`SchmittBasic/`](SchmittBasic)  
+  Apply hysteresis to an analog signal to produce a clean digital state.
 
+---
 
-## Utility and instrumentation examples
+## Output Shaping
 
-### StatisticsBasic
-- 📄 [README](StatisticsBasic/README.md)
-- 🧪 Sketch: `StatisticsBasic/StatisticsBasic.ino`
+Examples that control how outputs change over time.
 
-### LatchBasic
-- 📄 [README](LatchBasic/README.md)
-- 🧪 Sketch: `LatchBasic/LatchBasic.ino`
-
-### SoftWatchdogBasic
-- 📄 [README](SoftWatchdogBasic/README.md)
-- 🧪 Sketch: `SoftWatchdogBasic/SoftWatchdogBasic.ino`
-
-### AnalogIntegratorBasic
-- 📄 [README](AnalogIntegratorBasic/README.md)
-- 🧪 Sketch: `AnalogIntegratorBasic/AnalogIntegratorBasic.ino`
-
+- [`RateLimiterRampPWM/`](RateLimiterRampPWM)  
+  Ramp a PWM output toward a target value at a controlled rate.
 
 ---
 
 ## Notes
 
-- GPIO-owning classes require `begin()` to configure hardware.
-- Event/value utilities (`OneShotEvent`, `Toggle`, `RateLimiter`, `PeriodicTimer`, `LongPressDetector`, `AutoRepeat`) do not touch GPIO.
-- Examples avoid `delay()` except where explicitly used for Serial readability.
-
-These examples are meant to be read, modified, and combined.
-They illustrate the **composition-first philosophy** of GPIOUtils.
-
----
-
-Part of the **GPIOUtils** Arduino utility library.
+- These examples are intentionally minimal and composable.
+- They are not frameworks; they demonstrate one concept at a time.
+- Open each directory to see the corresponding `.ino` file.
