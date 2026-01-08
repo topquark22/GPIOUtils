@@ -1,4 +1,11 @@
 #pragma once
+
+#include <Arduino.h>
+
+#ifndef GPIOUTILS_PUBLIC_INCLUDE
+#warning "Include <gpioutils.h> instead of including impl/* directly."
+#endif
+
 /*
   SoftWatchdog - a simple software watchdog timer.
 
@@ -7,26 +14,28 @@
   take action (log, safe-state outputs, etc.).
 */
 
-#include <Arduino.h>
-
-class SoftWatchdog {
+class SoftWatchdog
+{
 public:
   explicit SoftWatchdog(uint32_t timeoutMs);
 
+  /** Change timeout at runtime. */
   void setTimeout(uint32_t timeoutMs);
+
+  /** Start/restart the watchdog "now". Call in setup(), or anytime you want to reset it. */
+  void begin();
+
+  /** Reset the watchdog timer (record activity). */
   void kick();
 
-  /**
-   * @brief Returns true if the time since the last kick is >= timeout.
-   */
+  /** Returns true if the time since the last kick is >= timeout. */
   bool expired() const;
 
-  /**
-   * @brief Milliseconds since last kick.
-   */
+  /** Milliseconds since last kick. */
   uint32_t ageMs() const;
 
-  uint32_t timeoutMs() const;
+  /** Configured timeout in milliseconds. */
+  uint32_t timeoutMs() const { return timeoutMs_; }
 
 private:
   uint32_t timeoutMs_;

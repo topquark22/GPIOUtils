@@ -13,27 +13,57 @@
 */
 
 static const uint8_t PIN_BTN = 2;
-static const uint8_t PIN_LED = 13;
+static const uint8_t PIN_LED = 5;
 
-Debounce btn(PIN_BTN, INPUT_PULLUP, 25);
-SoftWatchdog wd(2000); // 2 seconds
+static const uint32_t KICK_PERIOD_MS = 200;
+static const uint32_t TIMEOUT_MS = 800; // must be > KICK_PERIOD_MS
 
-uint32_t lastKick = 0;
+SoftWatchdog wd(TIMEOUT_MS);
 
-void setup() {
+uint32_t lastKickAttemptMs = 0;
+uint32_t lastPrintMs = 0;
+
+void setup()
+{
+  pinMode(PIN_BTN, INPUT_PULLUP);
   pinMode(PIN_LED, OUTPUT);
+
+  Serial.begin(115200);
+
+  wd.begin();
+  lastKickAttemptMs = millis();
+  lastPrintMs = millis();
 }
 
-void loop() {
-  btn.read();
-  uint32_t now = millis();
+void loop()
+{
+  const uint32_t now = millis();
+  const bool held = (digitalRead(PIN_BTN) == LOW);
 
-  // Kick unless button held (simulate failure)
-  bool held = (btn.read() == LOW); // INPUT_PULLUP: LOW means pressed
-  if (!held && (uint32_t)(now - lastKick) >= 200) {
-    lastKick = now;
-    wd.kick();
+  // Kick on a schedule unless the button is held down.
+  if ((uint32_t)(now - lastKickAttemptMs) >= KICK_PERIOD_MS)
+  {
+    lastKickAttemptMs = now;
+    if (!held)
+    {
+      wd.kick();
+    }
   }
 
+  // LED ON if expired, OFF otherwise.
   digitalWrite(PIN_LED, wd.expired() ? HIGH : LOW);
+
+  // Optional status print once per second.
+  if ((uint32_t)(now - lastPrintMs) >= 1000)
+  {
+    lastPrintMs = now;
+    Serial.print("held=");
+    Serial.print(held ? "yes" : "no");
+    Serial.print(" ageMs=");
+    Serial.print(wd.ageMs());
+    Serial.print(" timeoutMs=");
+    Serial.print(wd.timeoutMs());
+    Serial.print(" expired=");
+    Serial.println(wd.expired() ? "YES" : "no");
+  }
 }
