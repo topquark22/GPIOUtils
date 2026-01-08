@@ -53,7 +53,6 @@
 // Small utilities
 //
 #include "impl/latch.h"
-#include "impl/statistics.h"
 #include "impl/softwatchdog.h"
 
 /**
