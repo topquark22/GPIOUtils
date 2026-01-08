@@ -13,52 +13,16 @@
  */
 class Toggle {
 public:
-  /**
-   * @param initial_state starting state (default: false)
-   */
-  explicit Toggle(bool initial_state = false)
-  : state_(initial_state),
-    toggled_(false)
-  {}
+  explicit Toggle(bool initial_state = false);
 
-  void begin() {} // symmetry only
+  void begin(); // symmetry only
 
-  /**
-   * @brief Set the state.
-   * @param new_state New state.
-   * @return True if the state changed.
-   */
-  bool set(bool new_state) {
-    if (state_ != new_state) {
-      state_ = new_state;
-      toggled_ = true;
-      return true;
-    }
-    return false;
-  } 
+  bool set(bool new_state);
+  void trigger();
+  bool read();
 
-  /**
-   * @brief Flip the state.
-   */
-  void trigger() {
-    state_ = !state_;
-    toggled_ = true;
-  }
-
-  /**
-   * @brief Return current state. Reset toggled() flag.
-   */
-  bool read() {
-    toggled_ = false;
-    return state_;
-  }
-
-  bool state() const { return state_; }
-
-  /**
-   * @brief True if the state changed since last read().
-   */
-  bool toggled() const { return toggled_; }
+  bool state() const;
+  bool toggled() const;
 
 private:
   bool state_;

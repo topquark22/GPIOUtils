@@ -16,6 +16,8 @@
 //
 // Analog input utilities
 //
+#include "impl/analogcalibrator.h"
+#include "impl/analogintegrator.h"
 #include "impl/dejitter.h"
 #include "impl/schmitt.h"
 
@@ -24,6 +26,7 @@
 //
 #include "impl/debounce.h"
 #include "impl/edgedetector.h"
+#include "impl/glitchfilter.h"
 
 //
 // Event / value-driven utilities (no GPIO ownership)
@@ -31,16 +34,27 @@
 #include "impl/oneshot_event.h"
 #include "impl/toggle.h"
 #include "impl/ratelimiter.h"
+#include "impl/periodictimer.h"
+#include "impl/longpressdetector.h"
+#include "impl/autorepeat.h"
 
 //
 // Digital output utilities
 //
 #include "impl/timedoutput.h"
+#include "impl/pulsegenerator.h"
 
 //
 // -----------------------------------------------------------------------------
 // Inline utility helpers
 // -----------------------------------------------------------------------------
+
+//
+// Small utilities
+//
+#include "impl/latch.h"
+#include "impl/statistics.h"
+#include "impl/softwatchdog.h"
 
 /**
  * @brief Convert a 10-bit ADC reading (0..1023) to an 8-bit value (0..255),
