@@ -23,7 +23,6 @@ void setup() {
   pinMode(PIN_LED, OUTPUT);
   setBtn.begin();
   rstBtn.begin();
-  Serial.begin(115200); // DEBUG
 }
 
 void loop() {
