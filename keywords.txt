@@ -6,14 +6,28 @@
 # Datatypes (KEYWORD1)
 #######################################
 
+AnalogCalibrator    KEYWORD1
+AnalogIntegrator    KEYWORD1
 Dejitter            KEYWORD1
 Schmitt             KEYWORD1
+
 Debounce            KEYWORD1
 EdgeDetector        KEYWORD1
+GlitchFilter        KEYWORD1
+LongPressDetector   KEYWORD1
+AutoRepeat          KEYWORD1
+
+OneShot             KEYWORD1
 OneShotEvent        KEYWORD1
-Toggle              KEYWORD1
+PeriodicTimer       KEYWORD1
+PulseGenerator      KEYWORD1
 RateLimiter         KEYWORD1
 TimedOutput         KEYWORD1
+Toggle              KEYWORD1
+
+Latch               KEYWORD1
+Statistics          KEYWORD1
+SoftWatchdog        KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -21,19 +35,28 @@ TimedOutput         KEYWORD1
 
 begin               KEYWORD2
 read                KEYWORD2
+update              KEYWORD2
+tick                KEYWORD2
+reset               KEYWORD2
+kick                KEYWORD2
+
+state               KEYWORD2
+value               KEYWORD2
+changed             KEYWORD2
 rose                KEYWORD2
 fell                KEYWORD2
-trigger             KEYWORD2
-pulse               KEYWORD2
-on                  KEYWORD2
-off                 KEYWORD2
-is_on               KEYWORD2
-is_pulsing          KEYWORD2
-state               KEYWORD2
-toggled             KEYWORD2
-value               KEYWORD2
-set_value           KEYWORD2
 
-#######################################
-# Constants (LITERAL1)
-#######################################
+fired               KEYWORD2
+long_pressed        KEYWORD2
+repeat              KEYWORD2
+repeating           KEYWORD2
+
+normalize           KEYWORD2
+map_int             KEYWORD2
+map_float           KEYWORD2
+mean                KEYWORD2
+min                 KEYWORD2
+max                 KEYWORD2
+count               KEYWORD2
+expired             KEYWORD2
+ageMs               KEYWORD2

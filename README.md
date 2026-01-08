@@ -71,12 +71,15 @@ Users should **only include**:
 
 - **Debounce** — debounced digital input with edge events
 - **EdgeDetector** — edge detection without debouncing
+- **GlitchFilter** — rejects brief spikes/glitches on a digital input
 
 ### Event / value utilities (no GPIO ownership)
 
 - **OneShotEvent** — event-driven monostable
 - **Toggle** — event-driven toggle latch
 - **RateLimiter** — slew limiter for values
+- **PeriodicTimer** — non-blocking periodic timer (`millis()`-based)
+- **LongPressDetector** — turns a stable pressed signal into a long-press event
 
 ### Digital output utilities
 

@@ -37,6 +37,6 @@ private:
   float max_fall_per_sec_;
 
   float y_;
-  unsigned long last_ms_;
+  uint32_t last_ms_;
   bool started_;
 };

@@ -21,7 +21,7 @@ while it stays high or low.
 ## Hardware setup
 
 - Digital signal source connected to **pin 3**
-- LED or Serial Monitor output
+- Serial Monitor output
 
 ---
 

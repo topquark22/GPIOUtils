@@ -12,31 +12,18 @@
  */
 class OneShotEvent {
 public:
-  explicit OneShotEvent(uint32_t pulse_ms, bool retrigger = true)
-  : pulse_ms_(pulse_ms), retrigger_(retrigger), active_(false), start_ms_(0) {}
+  explicit OneShotEvent(uint32_t pulse_ms, bool retrigger = true);
 
-  void begin() {} // kept for symmetry with other components
+  void begin();
 
-  void trigger() {
-    const uint32_t now = millis();
-    if (!active_ || retrigger_) {
-      active_ = true;
-      start_ms_ = now;
-    }
-  }
+  void trigger();
+  bool read();
 
-  bool read() {
-    if (active_ && (millis() - start_ms_) >= pulse_ms_) {
-      active_ = false;
-    }
-    return active_;
-  }
+  void reset();
 
-  void reset() { active_ = false; }
-
-  bool is_active() const { return active_; }
-  uint32_t pulse_ms() const { return pulse_ms_; }
-  void set_pulse_ms(uint32_t ms) { pulse_ms_ = ms; }
+  bool is_active() const;
+  uint32_t pulse_ms() const;
+  void set_pulse_ms(uint32_t ms);
 
 private:
   uint32_t pulse_ms_;
