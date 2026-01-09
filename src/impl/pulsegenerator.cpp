@@ -17,11 +17,6 @@ void PulseGenerator::begin()
 
 void PulseGenerator::trigger(int32_t num_cycles)
 {
-  if (num_cycles == 0)
-  {
-    return;
-  }
-
   remaining_cycles_ = num_cycles;
   running_ = true;
   output_on_ = false;
