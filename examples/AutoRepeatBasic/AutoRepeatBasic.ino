@@ -1,4 +1,4 @@
-#include <gpioutils.h>
+#include <GPIOUtils.h>
 
 static const uint8_t PIN_BTN = 2; // button to GND, use INPUT_PULLUP
 

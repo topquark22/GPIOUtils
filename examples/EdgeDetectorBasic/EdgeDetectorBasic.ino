@@ -1,4 +1,4 @@
-#include <gpioutils.h>
+#include <GPIOUtils.h>
 
 // assume clean input (no debounce)
 const uint8_t PIN_IN = 3;

@@ -13,7 +13,7 @@
     - LED on pin 5
 */
 
-#include <gpioutils.h>
+#include <GPIOUtils.h>
 
 constexpr uint8_t BUTTON_PIN = 2;
 constexpr uint8_t LED_PIN    = 5;

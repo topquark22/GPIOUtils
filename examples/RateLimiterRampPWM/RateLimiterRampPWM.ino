@@ -1,4 +1,4 @@
-#include <gpioutils.h>
+#include <GPIOUtils.h>
 
 constexpr uint8_t POT_PIN = A0;
 constexpr uint8_t LED_PIN = 5;

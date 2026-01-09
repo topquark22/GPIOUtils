@@ -1,4 +1,4 @@
-#include <gpioutils.h>
+#include <GPIOUtils.h>
 
 static const uint8_t PIN_POT = A0;
 

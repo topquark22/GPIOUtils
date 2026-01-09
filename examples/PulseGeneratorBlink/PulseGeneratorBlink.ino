@@ -1,4 +1,4 @@
-#include <gpioutils.h>
+#include <GPIOUtils.h>
 
 static const uint8_t LED_PIN = 5;
 

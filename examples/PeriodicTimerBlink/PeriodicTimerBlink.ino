@@ -1,4 +1,4 @@
-#include <gpioutils.h>
+#include <GPIOUtils.h>
 
 constexpr uint32_t PERIOD_MS = 500;
 

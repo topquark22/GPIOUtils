@@ -1,4 +1,4 @@
-#include <gpioutils.h>
+#include <GPIOUtils.h>
 
 Debounce btn(2, INPUT_PULLUP, 25);
 Toggle latch;

@@ -10,7 +10,7 @@
   Open the Serial Monitor and press any key to trigger the one-shot.
 */
 
-#include <gpioutils.h>
+#include <GPIOUtils.h>
 
 constexpr uint32_t PULSE_MS = 500;
 

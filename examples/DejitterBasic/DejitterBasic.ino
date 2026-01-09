@@ -1,4 +1,4 @@
-#include <gpioutils.h>
+#include <GPIOUtils.h>
 
 constexpr uint8_t POT_PIN = A0;
 constexpr int DEAD_BAND = 2;
