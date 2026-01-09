@@ -62,34 +62,76 @@ Users should **only include**:
 
 ## Components
 
-### Analog input utilities
-
-- **Dejitter** — suppresses small ADC flicker using a deadband
-- **Schmitt** — analog Schmitt trigger with hysteresis
-
-### Digital input utilities
-
-- **Debounce** — debounced digital input with edge events
-- **EdgeDetector** — edge detection without debouncing
-- **GlitchFilter** — rejects brief spikes/glitches on a digital input
-
-### Event / value utilities (no GPIO ownership)
-
-- **OneShotEvent** — event-driven monostable
-- **Toggle** — event-driven toggle latch
-- **RateLimiter** — slew limiter for values
-- **PeriodicTimer** — non-blocking periodic timer (`millis()`-based)
-- **LongPressDetector** — turns a stable pressed signal into a long-press event
-
-### Digital output utilities
-
-- **TimedOutput** — non-blocking timed digital output
+GPIOUtils provides small, focused building blocks for common GPIO-related patterns.  
+Most components are **logic-only** and do not own pins unless explicitly stated.
 
 ---
 
-## Inline helper functions
+### Analog input utilities
 
-Available via `#include <GPIOUtils.h>`:
+- **AnalogCalibrator**  
+  Normalizes ADC readings when real-world inputs do not reach the rails (0 or full scale).
+
+- **Dejitter**  
+  Suppresses small analog noise using a configurable deadband.
+
+- **Schmitt**  
+  Applies hysteresis to convert noisy analog signals into stable digital decisions.
+
+---
+
+### Digital input utilities
+
+- **Debounce**  
+  Filters mechanical switch bounce and provides clean edge events.
+
+- **EdgeDetector**  
+  Detects rising and falling edges on a clean digital signal.
+
+- **GlitchFilter**  
+  Rejects short, spurious pulses by requiring a minimum stable duration.
+
+---
+
+### Event and value utilities (logic only)
+
+- **OneShotEvent**  
+  Generates a fixed-duration logical event when triggered.
+
+- **PulseGenerator**  
+  Produces finite or continuous pulse trains with configurable on/off timing.
+
+- **AutoRepeat**  
+  Emits repeated events while an input remains active (keyboard-style repeat).
+
+- **MultiPress**  
+  Detects single, double, or multi-press gestures after a quiet interval.
+
+- **LongPressDetector**  
+  Detects press-and-hold gestures exceeding a specified duration.
+
+- **Toggle**  
+  Maintains a toggled state driven by discrete events.
+
+- **RateLimiter**  
+  Limits how fast a value may change over time (slew-rate control).
+
+- **PeriodicTimer**  
+  Generates periodic “tick” events at a fixed interval.
+
+---
+
+### Digital output utilities
+
+- **TimedOutput**  
+  Owns a GPIO output pin and supports scheduled pulses and timed state changes.
+
+---
+
+### Inline helper functions
+
+Convenience functions for converting raw ADC readings into normalized or scaled values.
+
 
 - `adcToU8()` — ADC → 8-bit conversion with rounding
 - `adcToFloat()` — ADC → normalized float
