@@ -15,7 +15,7 @@ Debounce::Debounce(uint8_t pin, uint8_t mode, uint32_t debounce_ms)
 }
 
 Debounce::Debounce(uint8_t pin, uint32_t debounce_ms)
-: Debounce(pin, INPUT, debounce_ms)
+: Debounce(pin, INPUT_PULLUP, debounce_ms)
 {
 }
 
