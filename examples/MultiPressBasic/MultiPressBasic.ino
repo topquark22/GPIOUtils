@@ -29,7 +29,7 @@ static const uint32_t LED_PULSE_MS = 1500;
 // MultiPress owns the pin AND the mode
 MultiPress mp(
   BUTTON_PIN,
-  INPUT_PULLUP,
+ // INPUT_PULLUP,
   DEBOUNCE_MS,
   FINAL_GAP_MS,
   SEQ_TIMEOUT_MS

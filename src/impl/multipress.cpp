@@ -1,6 +1,7 @@
 #include "multipress.h"
 
 MultiPress::MultiPress(uint8_t pin,
+                       uint8_t mode,
                        uint32_t debounce_ms,
                        uint32_t final_gap_ms,
                        uint32_t sequence_timeout_ms)

@@ -25,9 +25,16 @@
 class MultiPress {
 public:
   MultiPress(uint8_t pin,
+             uint8_t mode,
              uint32_t debounce_ms,
              uint32_t final_gap_ms,
              uint32_t sequence_timeout_ms = 0);
+
+  MultiPress(uint8_t pin,
+             uint32_t debounce_ms,
+              uint32_t final_gap_ms,
+              uint32_t sequence_timeout_ms = 0) :
+    MultiPress(pin, INPUT_PULLUP, debounce_ms, final_gap_ms, sequence_timeout_ms) {}
 
   /** Call from setup() to initialize internal timers/state. */
   void begin();
