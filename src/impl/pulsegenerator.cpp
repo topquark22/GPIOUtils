@@ -1,62 +1,80 @@
 #include "pulsegenerator.h"
 
-namespace {
-  inline bool time_reached(uint32_t now, uint32_t target) {
-    return (int32_t)(now - target) >= 0;
-  }
-} // namespace
+PulseGenerator::PulseGenerator(
+    uint8_t pin,
+    unsigned long period_ms,
+    bool active_high)
+    : pin_(pin),
+      period_ms_(period_ms),
+      active_high_(active_high) {}
 
-
-PulseGenerator::PulseGenerator(uint32_t on_ms, uint32_t off_ms, bool start_high)
-: on_ms_(on_ms == 0 ? 1 : on_ms),
-  off_ms_(off_ms == 0 ? 1 : off_ms)
+void PulseGenerator::begin()
 {
-  start(start_high);
-}
-
-void PulseGenerator::set_periods(uint32_t on_ms, uint32_t off_ms) {
-  on_ms_ = (on_ms == 0 ? 1 : on_ms);
-  off_ms_ = (off_ms == 0 ? 1 : off_ms);
-  // Recompute next toggle relative to now to avoid long stale periods.
-  uint32_t now = millis();
-  next_toggle_ms_ = now + (state_ ? on_ms_ : off_ms_);
-}
-
-void PulseGenerator::start(bool start_high) {
-  running_ = true;
-  state_ = start_high;
-  uint32_t now = millis();
-  next_toggle_ms_ = now + (state_ ? on_ms_ : off_ms_);
-  changed_ = rose_ = fell_ = false;
-}
-
-void PulseGenerator::stop(bool output_low) {
+  pinMode(pin_, OUTPUT);
+  set_output_(false);
   running_ = false;
-  bool new_state = output_low ? false : state_;
-  changed_ = (new_state != state_);
-  rose_ = (!state_ && new_state);
-  fell_ = (state_ && !new_state);
-  state_ = new_state;
 }
 
-void PulseGenerator::update() {
-  changed_ = rose_ = fell_ = false;
-  if (!running_) return;
+void PulseGenerator::trigger(int32_t num_cycles)
+{
+  if (num_cycles == 0)
+  {
+    return;
+  }
 
-  uint32_t now = millis();
-  if (time_reached(now, next_toggle_ms_)) {
-    bool prev = state_;
-    state_ = !state_;
+  remaining_cycles_ = num_cycles;
+  running_ = true;
+  output_on_ = false;
+  last_toggle_ms_ = millis();
+}
 
-    changed_ = true;
-    rose_ = (!prev && state_);
-    fell_ = (prev && !state_);
+void PulseGenerator::stop()
+{
+  running_ = false;
+  set_output_(false);
+}
 
-    // Cadence-preserving schedule.
-    next_toggle_ms_ += (state_ ? on_ms_ : off_ms_);
-    // If loop was stalled, avoid rapid catch-up toggles.
-    if (time_reached(now, next_toggle_ms_ + (state_ ? on_ms_ : off_ms_))) {
-      next_toggle_ms_ = now + (state_ ? on_ms_ : off_ms_);
+bool PulseGenerator::active() const
+{
+  return running_;
+}
+
+void PulseGenerator::update()
+{
+  if (!running_)
+  {
+    return;
+  }
+
+  unsigned long now = millis();
+
+  if (now - last_toggle_ms_ < period_ms_ / 2)
+  {
+    return;
+  }
+
+  last_toggle_ms_ = now;
+
+  // Toggle output
+  output_on_ = !output_on_;
+  set_output_(output_on_);
+
+  // Count pulse when we transition OFF
+  if (!output_on_)
+  {
+    if (remaining_cycles_ > 0)
+    {
+      remaining_cycles_--;
+      if (remaining_cycles_ == 0)
+      {
+        stop();
+      }
     }
   }
+}
+
+void PulseGenerator::set_output_(bool on)
+{
+  bool level = on ? active_high_ : !active_high_;
+  digitalWrite(pin_, level ? HIGH : LOW);
 }

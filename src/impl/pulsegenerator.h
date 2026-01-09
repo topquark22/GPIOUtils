@@ -1,51 +1,39 @@
 #pragma once
+
 #include <Arduino.h>
 
-#ifndef GPIOUTILS_PUBLIC_INCLUDE
-#warning "Include <GPIOUtils.h> instead of including impl/* directly."
-#endif
-
-/**
- * @brief Non-blocking square-wave / blink pattern generator.
- *
- * This class does NOT own a GPIO pin. Call update() frequently and then
- * drive an output pin with state().
- *
- * Usage:
- *   PulseGenerator pg(200, 800); // 200 ms ON, 800 ms OFF
- *   ...
- *   pg.update();
- *   digitalWrite(LED_BUILTIN, pg.state());
- */
-class PulseGenerator {
+class PulseGenerator
+{
 public:
-  PulseGenerator(uint32_t on_ms, uint32_t off_ms, bool start_high = true);
+  PulseGenerator(
+      uint8_t pin,
+      unsigned long period_ms,
+      bool active_high = true);
 
-  void set_periods(uint32_t on_ms, uint32_t off_ms);
-  void start(bool start_high = true);
-  void stop(bool output_low = true);
+  void begin();
 
-  /**
-   * @brief Update timing and edge flags. Call frequently from loop().
-   */
+  // Start generating pulses
+  // num_cycles > 0 : finite number of pulses
+  // num_cycles == -1 : infinite pulses
+  void trigger(int32_t num_cycles = -1);
+
+  void stop();
+
   void update();
 
-  bool running() const { return running_; }
-  bool state() const { return state_; }
-
-  bool changed() const { return changed_; }
-  bool rose() const { return rose_; }
-  bool fell() const { return fell_; }
+  bool active() const;
 
 private:
-  uint32_t on_ms_;
-  uint32_t off_ms_;
+  void set_output_(bool on);
 
-  bool running_{true};
-  bool state_{true}; // high=ON
-  uint32_t next_toggle_ms_{0};
+  uint8_t pin_;
+  unsigned long period_ms_;
+  bool active_high_;
 
-  bool changed_{false};
-  bool rose_{false};
-  bool fell_{false};
+  bool running_ = false;
+  bool output_on_ = false;
+
+  unsigned long last_toggle_ms_ = 0;
+
+  int32_t remaining_cycles_ = 0; // -1 = infinite
 };
