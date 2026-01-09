@@ -1,58 +1,40 @@
+# examples/DebounceBasic/README.md
 # DebounceBasic
 
-This example demonstrates how to use **GPIOUtils::Debounce** to reliably read a
-mechanical pushbutton without false triggers caused by contact bounce.
+## Introduction
 
-The sketch detects clean button press events and toggles an LED exactly once per
-press.
+Demonstrates `Debounce` for clean pushbutton handling, using edge events (`fell()`) to toggle an LED.
 
 ---
 
-## What problem this solves
+## Behaviour
 
-Mechanical buttons do not switch cleanly. When pressed or released, the contacts
-typically bounce for several milliseconds, producing multiple rapid transitions.
-
-Without debouncing, a single press can be interpreted as many presses.
-
-`Debounce`:
-- filters out contact bounce
-- produces a stable logical state
-- provides clean edge events (`rose()`, `fell()`)
+- LED starts in an undefined state (whatever the pin powers up as).
+- Each physical button press toggles the LED state once.
+- Button bounce is filtered so you don’t get multiple toggles per press.
 
 ---
 
-## Hardware setup
+## Wiring
 
-- Pushbutton between **digital pin 2** and **GND**
-- LED on **digital pin 5**
-
-The button uses the internal pull-up resistor (`INPUT_PULLUP`), so:
-- released = HIGH
-- pressed  = LOW
-
----
-
-## Sketch behavior
-
-- The button input is debounced with a 25 ms stability window
-- Each clean **button press** toggles the LED state
-- A message is printed to the Serial Monitor on each debounced press
+- Button:
+  - One side → `GND`
+  - Other side → `D2` (`BUTTON_PIN`)
+  - Pin uses `INPUT_PULLUP` (no external resistor required)
+- LED:
+  - LED anode → `D5` (`LED_PIN`) through a resistor (220–1kΩ)
+  - LED cathode → `GND`
 
 ---
 
-## Relevant code excerpt
+## Key points illustrated
 
-```cpp
-Debounce button(2, INPUT_PULLUP, 25);
+- Debouncing with a configurable time (`DEBOUNCE_MS`).
+- Using edge events (`fell()`) instead of level polling.
+- Active-LOW button logic when using pull-ups.
 
-void setup() {
-  button.begin();
-}
+---
 
-void loop() {
-  button.read();
-  if (button.fell()) {
-    // button pressed
-  }
-}
+## Why this example exists
+
+Mechanical switches bounce. Without debouncing, “one press” often becomes many. This is the canonical minimal pattern for “do something once per press.”

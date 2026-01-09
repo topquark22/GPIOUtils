@@ -1,62 +1,40 @@
+# examples/MultiPressBasic/README.md
 # MultiPressBasic
 
-This example demonstrates the **MultiPress** helper from **GPIOUtils**, which
-detects and counts multiple button presses occurring within a short time window.
+## Introduction
 
-The sketch shows how to collect a button-press sequence and retrieve the final count
-once the sequence is complete.
-
----
-
-## What this example shows
-
-- How to use `MultiPress` to detect **sequential button presses**
-- How `MultiPress` internally manages debouncing and timing
-- How to retrieve the final press count using `takeCount()`
-- How the press count is only reported **after the sequence has ended**
-
----
-
-## Hardware setup
-
-- **Button**
-  - Connected between **pin 2** and **GND**
-  - Uses `INPUT_PULLUP` internally
-
-No other hardware is required.
+Demonstrates `MultiPress` for counting quick successive button presses (single / double / triple, etc.), then acting on the final count. It also uses `OneShotEvent` to generate a fixed-duration LED pulse after a recognized pattern.
 
 ---
 
 ## Behaviour
 
-- Each button press is debounced internally
-- Presses are accumulated into a sequence
-- When no further presses occur within the timeout window:
-  - the sequence is finalized
-  - `takeCount()` returns the number of presses
-- After `takeCount()` is called:
-  - the stored count is cleared
-  - the next press starts a new sequence
-
-Until the sequence is finalized, `takeCount()` returns `0`.
+- Button on `D2` is pressed multiple times.
+- `MultiPress` waits for a “quiet gap” after the last press, then reports the total count once.
+- If the count is exactly **2** (double-press):
+  - the LED on `D5` turns ON for about `1500 ms`, then turns OFF.
 
 ---
 
-## Typical use cases
+## Wiring
 
-This pattern is useful for:
-
-- mode selection using multi-tap input
-- hidden or diagnostic commands
-- extending UI functionality with a single button
-- distinguishing between single-, double-, and triple-press actions
-
-The logic remains non-blocking and does not rely on delays.
+- Button:
+  - Between `D2` (`BUTTON_PIN`) and `GND`
+  - (As written, `MultiPress` is configured with timing parameters and assumes pull-up style wiring.)
+- LED:
+  - LED anode → `D5` (`LED_PIN`) through a resistor
+  - LED cathode → `GND`
 
 ---
 
-## Related examples
+## Key points illustrated
 
-- **DebounceBasic** – basic debounced button input
-- **OneShotBasic** – timed output pulses
+- Multi-press gesture recognition (count presses, then “commit” once).
+- “Final gap” concept: don’t decide until the user stops pressing.
+- Driving an output using a logical one-shot (`OneShotEvent`) rather than delay loops.
 
+---
+
+## Why this example exists
+
+Double-click / double-press style interactions show up everywhere, and the usual DIY implementations are fragile (timing edge cases, repeated triggers, blocking delays). This example provides a reliable baseline pattern you can adapt to “1 press = X, 2 presses = Y, 3 presses = Z.”

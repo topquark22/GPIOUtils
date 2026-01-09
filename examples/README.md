@@ -1,84 +1,126 @@
 # GPIOUtils Examples
 
-This directory contains small, focused example sketches demonstrating the
-individual building blocks provided by GPIOUtils.
+This directory contains small, focused example sketches demonstrating individual classes and idioms provided by the **GPIOUtils** library.
 
-Each example lives in its own subdirectory and is intended to be read,
-compiled, and modified independently.
+
+Each example is intentionally narrow in scope. Rather than showing “big applications,” these sketches illustrate **one concept at a time**, using minimal wiring and logic. They are meant to be read, modified, and reused as building blocks.
+
+All examples are **non-blocking** unless explicitly stated.
+
+---
+
+## Wiring
 
 Pin conventions used by all examples (unless noted):
-- POT_PIN    = A0
-- BUTTON_PIN = 2
-- SIGNAL_PIN = 3
-- LED_PIN    = 5
+
+| function | pinMode |symbol | pin |
+|----------|-------|-----|---|
+| voltage divider | INPUT | POT_PIN | A0 |
+| mechanical pushbutton | INPUT_PULLUP | BUTTON_PIN | 2 |
+| digital signal (clean) | INPUT | SIGNAL_PIN | 3 |
+| LED, buzzer etc. | OUTPUT |  LED_PIN | 5 |
 
 ---
 
-## Digital Inputs
+## Example index
 
-Examples related to buttons, switches, and digital signal conditioning.
+### Analog & signal conditioning
 
-- [`DebounceBasic/`](DebounceBasic)  
-  Basic debouncing of a mechanical button.
+- **AnalogCalibratorBasic**  
+  Normalize and remap real-world ADC readings that don’t reach 0 or full scale.
 
-- [`GlitchFilterBasic/`](GlitchFilterBasic)  
-  Rejects short digital glitches while allowing real transitions.
+- **AnalogDejitterRead**  
+  Remove small analog noise using a deadband and observe the effect via Serial output.
 
-- [`LongPressDetectorBasic/`](LongPressDetectorBasic)  
-  Detects when a button has been held longer than a threshold.
+- **AnalogIntegratorBasic**  
+  Integrate a normalized analog signal over time (“area under the curve”).
 
-- [`MultiPressBasic/`](MultiPressBasic)
-  Captures multiple button presses within a short time period.
+- **DejitterBasic**  
+  Side-by-side comparison of raw vs dejittered ADC readings.
 
-- [`ToggleOnPress/`](ToggleOnPress)  
-  Toggle a state each time a button is pressed.
-
----
-
-## Timing & Events
-
-Examples demonstrating non-blocking time-based behavior.
-
-- [`OneShotEventBasic/`](OneShotEventBasic)  
-  Generate a single timed pulse in response to an event.
-
-- [`PeriodicTimerBlink/`](PeriodicTimerBlink)  
-  Use a periodic timer instead of `delay()`.
-
-- [`PulseGeneratorBlink/`](PulseGeneratorBlink)  
-  Generate a square-wave blink pattern without blocking.
-
-- [`SoftWatchdogBasic/`](SoftWatchdogBasic)  
-  Software watchdog that detects when expected activity stops.
+- **SchmittAnalogThreshold**  
+  Convert a noisy analog signal into a stable digital decision using hysteresis.
 
 ---
 
-## Analog Processing
+### Buttons, edges, and gestures
 
-Examples for stabilizing and shaping analog values.
+- **DebounceBasic**  
+  Clean a mechanical button and trigger an action once per press.
 
-- [`DejitterBasic/`](DejitterBasic)  
-  Suppress small analog jitter while preserving full-range motion.
+- **EdgeDetectorBasic**  
+  Detect rising and falling edges on a clean digital signal.
 
-- [`AnalogCalibratorBasic/`](AnalogCalibratorBasic)  
-  Map raw ADC values using calibrated endpoints.
+- **GlitchFilterBasic**  
+  Reject short spikes by requiring a minimum stable time.
 
-- [`SchmittBasic/`](SchmittBasic)  
-  Apply hysteresis to an analog signal to produce a clean digital state.
+- **LongPressDetectorBasic**  
+  Detect press-and-hold gestures (long press vs short press).
 
----
+- **MultiPressBasic**  
+  Count multiple quick presses (single, double, triple, etc.) and act once.
 
-## Output Shaping
-
-Examples that control how outputs change over time.
-
-- [`RateLimiterRampPWM/`](RateLimiterRampPWM)  
-  Ramp a PWM output toward a target value at a controlled rate.
+- **ToggleOnPress**  
+  Toggle a remembered state on each button press.
 
 ---
 
-## Notes
+### Timing, pulses, and rate control
 
-- These examples are intentionally minimal and composable.
-- They are not frameworks; they demonstrate one concept at a time.
-- Open each directory to see the corresponding `.ino` file.
+- **PeriodicTimerBlink**  
+  Blink an LED at a fixed rate without using `delay()`.
+
+- **PulseGeneratorBlink**  
+  Generate a finite blink pattern (N blinks) triggered by a button.
+
+- **PulseStretcherButtonToLED**  
+  Stretch a brief button press into a guaranteed-visible output pulse.
+
+- **OneShotEventBasic**  
+  Trigger a fixed-duration logical event from any source (Serial in this example).
+
+- **TimedOutputPulse**  
+  Schedule timed pulses while letting a class own the output pin.
+
+- **RateLimiterRampPWM**  
+  Smooth how fast a value changes (slew-rate limiting), not just noise.
+
+---
+
+### Control & safety patterns
+
+- **AutoRepeatBasic**  
+  Keyboard-style auto-repeat behavior when holding a button.
+
+- **LatchBasic**  
+  Classic SET / RESET latch using two buttons.
+
+- **SoftWatchdogBasic**  
+  Detect stalled logic by requiring periodic “kicks.”
+
+---
+
+## How to use these examples
+
+1. Pick the example closest to your problem.
+2. Read its `README.md` first — behavior and intent are documented there.
+3. Open the `.ino` file and scan it top to bottom.
+4. Copy the pattern, not necessarily the entire sketch.
+
+These examples are designed to be **composable**: many real sketches will use several of these classes together.
+
+---
+
+## Design philosophy
+
+GPIOUtils examples follow a few consistent principles:
+
+- No `delay()` unless explicitly teaching why it’s bad
+- Clear separation between:
+  - input conditioning
+  - timing / logic
+  - output driving
+- Logic classes do **not** secretly own GPIO unless their name says they do
+- Time is always handled safely (`millis()` deltas, wrap-safe comparisons)
+
+If you understand the examples in this folder, you should be able to assemble reliable, responsive Arduino sketches without reinventing timing or input logic each time.

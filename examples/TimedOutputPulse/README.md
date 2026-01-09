@@ -1,36 +1,36 @@
+# examples/TimedOutputPulse/README.md
 # TimedOutputPulse
 
-This example demonstrates **GPIOUtils::TimedOutput**, a non-blocking timed
-digital output.
+## Introduction
+
+Demonstrates `TimedOutput`, a helper that owns a GPIO output pin and supports timed pulses. This sketch shows a repeated pulse pattern (with delays mainly for demonstration clarity).
 
 ---
 
-## What problem this solves
+## Behaviour
 
-Turning an output on for a fixed time without blocking code execution.
-
-`TimedOutput` allows pulsing outputs without `delay()`.
-
----
-
-## Hardware setup
-
-- LED connected to **pin 5**
+- Pulses the LED ON for about 500 ms using `led.pulse(500)`.
+- Waits until the output has actually turned OFF again (by polling `led.read()`).
+- Then waits ~1500 ms and repeats.
 
 ---
 
-## Sketch behavior
+## Wiring
 
-- Triggers a timed pulse
-- LED turns off automatically after the duration
-
----
-
-## Notes
-
-- `read()` must be called regularly to update timing.
-- Supports active-high and active-low outputs.
+- LED:
+  - LED anode → `D5` through a resistor
+  - LED cathode → `GND`
 
 ---
 
-Part of the **GPIOUtils** Arduino utility library.
+## Key points illustrated
+
+- `TimedOutput` owns the output pin and its state.
+- `pulse(duration_ms)` schedules an ON window without manual timers.
+- `read()` both returns current output state and services the timing.
+
+---
+
+## Why this example exists
+
+Timed pulses show up everywhere (beeps, indicator flashes, actuators). People often hand-roll timing logic around a pin. This example shows the “own the pin, schedule pulses” model in its simplest form.

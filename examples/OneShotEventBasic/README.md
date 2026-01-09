@@ -1,31 +1,37 @@
+# examples/OneShotEventBasic/README.md
 # OneShotEventBasic
 
-This example demonstrates **GPIOUtils::OneShotEvent**, an event-driven
-non-blocking one-shot (monostable).
+## Introduction
+
+Demonstrates `OneShotEvent` as a purely logical one-shot timer (it does not own GPIO). The trigger in this example is Serial input to emphasize that it can be driven by any event source.
 
 ---
 
-## What problem this solves
+## Behaviour
 
-Sometimes an event is very short, but you want its effect to last longer.
-
-`OneShotEvent` converts a momentary trigger into a fixed-duration true signal.
-
----
-
-## Sketch behavior
-
-- A trigger event starts a one-shot pulse
-- Output remains true for a fixed duration
-- No `delay()` is used
+- Open the Serial Monitor at `115200` baud.
+- Press any key (send any character):
+  - prints `Triggered`
+  - one-shot becomes ACTIVE for about `500 ms`
+- While active, the sketch prints `One-shot ACTIVE` repeatedly (as fast as the loop runs).
 
 ---
 
-## Notes
+## Wiring
 
-- `OneShotEvent` does not read GPIO pins.
-- It is designed to be triggered by events from other utilities.
+- No external wiring required.
+- Serial Monitor: `115200` baud
 
 ---
 
-Part of the **GPIOUtils** Arduino utility library.
+## Key points illustrated
+
+- One-shot timers can be used without tying them to a pin.
+- Triggering from non-GPIO events (Serial, network, timers, state machines, etc.).
+- The one-shot manages time internally; you just call `trigger()` and `read()`.
+
+---
+
+## Why this example exists
+
+Many sketches bake timing into ad-hoc state variables. A reusable one-shot simplifies “make a condition true for N milliseconds after an event,” regardless of where the event comes from.

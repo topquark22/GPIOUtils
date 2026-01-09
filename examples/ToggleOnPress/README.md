@@ -1,38 +1,40 @@
+# examples/ToggleOnPress/README.md
 # ToggleOnPress
 
-This example demonstrates a press-to-toggle latch built using:
+## Introduction
 
-```
-Debounce → Toggle
-```
+Demonstrates a simple “toggle latch” driven by a debounced button press. This is the classic “press once for ON, press again for OFF” behavior.
 
 ---
 
-## What problem this solves
+## Behaviour
 
-You want a button to toggle a state instead of acting momentarily.
-
----
-
-## Hardware setup
-
-- Button on **pin 2** (INPUT_PULLUP)
-- LED on **pin 5**
+- Each button press toggles an internal latch state.
+- LED on `D5` reflects the latch:
+  - ON when latched
+  - OFF when unlatched
 
 ---
 
-## Sketch behavior
+## Wiring
 
-- Each clean button press toggles the LED state
-- No repeated toggling while held
-
----
-
-## Notes
-
-- `Toggle` is event-driven and does not touch GPIO.
-- `Debounce` provides clean press events.
+- Button:
+  - Between `D2` and `GND`
+  - Uses `INPUT_PULLUP` (via `Debounce`)
+- LED:
+  - LED anode → `D5` (`LED_PIN`) through a resistor
+  - LED cathode → `GND`
 
 ---
 
-Part of the **GPIOUtils** Arduino utility library.
+## Key points illustrated
+
+- Debounced edge detection (`fell()`) as the trigger event.
+- A toggle-style latch that remembers state between presses.
+- Output driven directly from logical state (`latch.read()`).
+
+---
+
+## Why this example exists
+
+Toggling modes is a basic UI primitive, but it’s often implemented with fragile “if pressed then invert” logic that retriggers on bounce. This example is the clean reference for “toggle once per press.”
