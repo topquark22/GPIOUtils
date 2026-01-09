@@ -27,7 +27,7 @@ Examples related to buttons, switches, and digital signal conditioning.
 - [`LongPressDetectorBasic/`](LongPressDetectorBasic)  
   Detects when a button has been held longer than a threshold.
 
-- [`MultipressBasic/`](MultipressBasic)
+- [`MultiPressBasic/`](MultiPressBasic)
   Captures multiple button presses within a short time period.
 
 - [`ToggleOnPress/`](ToggleOnPress)  
