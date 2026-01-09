@@ -46,7 +46,7 @@ as extra classes.
 ```
 GPIOUtils/
   src/
-    gpioutils.h          // the only public header
+    GPIOUtils.h          // the only public header
     impl/                // internal headers and sources
   examples/
     README.md            // example index (recommended starting point)
@@ -55,7 +55,7 @@ GPIOUtils/
 Users should **only include**:
 
 ```cpp
-#include <gpioutils.h>
+#include <GPIOUtils.h>
 ```
 
 ---
@@ -89,7 +89,7 @@ Users should **only include**:
 
 ## Inline helper functions
 
-Available via `#include <gpioutils.h>`:
+Available via `#include <GPIOUtils.h>`:
 
 - `adcToU8()` — ADC → 8-bit conversion with rounding
 - `adcToFloat()` — ADC → normalized float
