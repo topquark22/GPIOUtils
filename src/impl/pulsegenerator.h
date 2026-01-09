@@ -1,39 +1,64 @@
 #pragma once
-
 #include <Arduino.h>
 
+#ifndef GPIOUTILS_PUBLIC_INCLUDE
+#warning "Include <GPIOUtils.h> instead of including impl/* directly."
+#endif
+
+/**
+ * @brief Non-blocking square-wave / blink pattern generator.
+ *
+ * This class does NOT own a GPIO pin. Call update() frequently and then
+ * drive an output pin with state().
+ *
+ * Usage:
+ *   PulseGenerator pg(200, 800); // 200 ms ON, 800 ms OFF
+ *   ...
+ *   pg.update();
+ *   digitalWrite(LED_BUILTIN, pg.state());
+ */
 class PulseGenerator
 {
 public:
-  PulseGenerator(
-      uint8_t pin,
-      unsigned long period_ms,
-      bool active_high = true);
+  PulseGenerator(uint32_t on_ms, uint32_t off_ms, bool start_high = true);
 
-  void begin();
+  void set_periods(uint32_t on_ms, uint32_t off_ms);
 
-  // Start generating pulses
+  // Start running continuously (infinite cycles).
+  void start(bool start_high = true);
+
+  // Start (or restart) for a specific number of cycles.
   // num_cycles > 0 : finite number of pulses
-  // num_cycles == -1 : infinite pulses
-  void trigger(int32_t num_cycles = -1);
+  // num_cycles == -1 : infinite
+  // num_cycles == 0 : no-op (stays as-is)
+  void trigger(int num_cycles);
 
-  void stop();
+  void stop(bool output_low = true);
 
+  /**
+   * @brief Update timing and edge flags. Call frequently from loop().
+   */
   void update();
 
-  bool active() const;
+  bool running() const { return running_; }
+  bool state() const { return state_; }
+
+  bool changed() const { return changed_; }
+  bool rose() const { return rose_; }
+  bool fell() const { return fell_; }
 
 private:
-  void set_output_(bool on);
+  void start_internal_(bool start_high, int num_cycles);
 
-  uint8_t pin_;
-  unsigned long period_ms_;
-  bool active_high_;
+  uint32_t on_ms_;
+  uint32_t off_ms_;
 
-  bool running_ = false;
-  bool output_on_ = false;
+  bool running_{true};
+  bool state_{true}; // high=ON
+  uint32_t next_toggle_ms_{0};
 
-  unsigned long last_toggle_ms_ = 0;
-
-  int32_t remaining_cycles_ = 0; // -1 = infinite
+  bool changed_{false};
+  bool rose_{false};
+  bool fell_{false};
+  int num_cycles_{-1}; // -1 = infinite
 };

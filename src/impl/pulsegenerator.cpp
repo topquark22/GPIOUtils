@@ -1,75 +1,127 @@
 #include "pulsegenerator.h"
 
-PulseGenerator::PulseGenerator(
-    uint8_t pin,
-    unsigned long period_ms,
-    bool active_high)
-    : pin_(pin),
-      period_ms_(period_ms),
-      active_high_(active_high) {}
-
-void PulseGenerator::begin()
+namespace
 {
-  pinMode(pin_, OUTPUT);
-  set_output_(false);
+  // millis()-wrap-safe: true when now has reached/passed target.
+  inline bool time_reached(uint32_t now, uint32_t target)
+  {
+    return (int32_t)(now - target) >= 0;
+  }
+} // namespace
+
+PulseGenerator::PulseGenerator(uint32_t on_ms, uint32_t off_ms, bool start_high)
+    : on_ms_(on_ms == 0 ? 1 : on_ms),
+      off_ms_(off_ms == 0 ? 1 : off_ms)
+{
+  // Do NOT auto-start. Stay idle until start() or trigger().
   running_ = false;
+  state_ = start_high;
+  num_cycles_ = 0;
+
+  // Initialize timing to something sane even while idle.
+  next_toggle_ms_ = millis();
+
+  changed_ = rose_ = fell_ = false;
 }
 
-void PulseGenerator::trigger(int32_t num_cycles)
+void PulseGenerator::set_periods(uint32_t on_ms, uint32_t off_ms)
 {
-  remaining_cycles_ = num_cycles;
+  on_ms_ = (on_ms == 0 ? 1 : on_ms);
+  off_ms_ = (off_ms == 0 ? 1 : off_ms);
+
+  // Recompute next toggle relative to now to avoid stale long waits.
+  uint32_t now = millis();
+  next_toggle_ms_ = now + (state_ ? on_ms_ : off_ms_);
+}
+
+void PulseGenerator::start(bool start_high)
+{
   running_ = true;
-  output_on_ = false;
-  last_toggle_ms_ = millis();
+  state_ = start_high;
+  num_cycles_ = -1; // infinite
+
+  uint32_t now = millis();
+  next_toggle_ms_ = now + (state_ ? on_ms_ : off_ms_);
+
+  changed_ = rose_ = fell_ = false;
 }
 
-void PulseGenerator::stop()
+void PulseGenerator::trigger(int num_cycles)
+{
+  // Explicit semantic: trigger(0) == stop()
+  if (num_cycles == 0)
+  {
+    stop();
+    return;
+  }
+
+  // Restart immediately, even if already running.
+  running_ = true;
+
+  // Deterministic restart phase: start ON/high.
+  // If you want "restart low then first toggle goes high", change this to false.
+  state_ = true;
+
+  num_cycles_ = num_cycles; // -1 allowed for infinite
+
+  uint32_t now = millis();
+  next_toggle_ms_ = now + on_ms_;
+
+  changed_ = rose_ = fell_ = false;
+}
+
+void PulseGenerator::stop(bool output_low)
 {
   running_ = false;
-  set_output_(false);
-}
 
-bool PulseGenerator::active() const
-{
-  return running_;
+  bool new_state = output_low ? false : state_;
+
+  changed_ = (new_state != state_);
+  rose_ = (!state_ && new_state);
+  fell_ = (state_ && !new_state);
+
+  state_ = new_state;
 }
 
 void PulseGenerator::update()
 {
+  changed_ = rose_ = fell_ = false;
+
   if (!running_)
+    return;
+
+  // Completed requested cycles?
+  if (num_cycles_ == 0)
   {
+    running_ = false;
     return;
   }
 
-  unsigned long now = millis();
-
-  if (now - last_toggle_ms_ < period_ms_ / 2)
-  {
+  uint32_t now = millis();
+  if (!time_reached(now, next_toggle_ms_))
     return;
-  }
 
-  last_toggle_ms_ = now;
+  bool prev = state_;
+  state_ = !state_;
 
-  // Toggle output
-  output_on_ = !output_on_;
-  set_output_(output_on_);
-
-  // Count pulse when we transition OFF
-  if (!output_on_)
+  // Count full cycles on the OFF edge.
+  if (state_ == false && num_cycles_ > 0)
   {
-    if (remaining_cycles_ > 0)
-    {
-      remaining_cycles_--;
-      if (remaining_cycles_ == 0)
-      {
-        stop();
-      }
-    }
+    num_cycles_--;
   }
-}
 
-void PulseGenerator::set_output_(bool on)
-{
-  bool level = on ? active_high_ : !active_high_;
-  digitalWrite(pin_, level ? HIGH : LOW);
+  changed_ = true;
+  rose_ = (!prev && state_);
+  fell_ = (prev && !state_);
+
+  // Cadence-preserving schedule: advance from previous deadline,
+  // rather than anchoring to "now" every time.
+  next_toggle_ms_ += (state_ ? on_ms_ : off_ms_);
+
+  // If loop was stalled a long time, avoid rapid catch-up toggles.
+  uint32_t next_period = (state_ ? on_ms_ : off_ms_);
+  if (time_reached(now, next_toggle_ms_ + next_period))
+  {
+    next_toggle_ms_ = now + next_period;
+  }
 }

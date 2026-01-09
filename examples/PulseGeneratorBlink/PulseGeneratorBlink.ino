@@ -1,39 +1,37 @@
 #include <Arduino.h>
 #include <GPIOUtils.h>
 
-static constexpr uint8_t BUTTON_PIN = 2;
+static constexpr uint8_t BUTTON_PIN = 2;  // active LOW
 static constexpr uint8_t LED_PIN    = 5;
 
-// Blink parameters
-static constexpr unsigned long BLINK_PERIOD_MS = 500; // full period
-
-// -1 for infinite
-const int NUM_BLINKS = 3;
+// 250ms on / 250ms off = 3 visible blinks in ~1.5s
+static constexpr uint32_t ON_MS  = 250;
+static constexpr uint32_t OFF_MS = 250;
 
 Debounce btn(BUTTON_PIN, INPUT_PULLUP);
 
-// period is full cycle (on + off)
-PulseGenerator blinker(
-  LED_PIN,
-  BLINK_PERIOD_MS,
-  true   // active HIGH LED
-);
+// PulseGenerator is pure logic (does not own a pin)
+PulseGenerator pg(ON_MS, OFF_MS, true);
 
 void setup() {
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, LOW);
+
   btn.begin();
-  blinker.begin();
+
+  // Keep generator idle at boot
+  pg.stop(true);
 }
 
 void loop() {
-  // Update stateful helpers
   btn.read();
-  blinker.update();
+  pg.update();
 
-  // On button press, trigger 3 blinks
+  // Drive the LED from the generator state
+  digitalWrite(LED_PIN, pg.state() ? HIGH : LOW);
+
+  // Restart and blink 3 times on each press
   if (btn.fell()) {
-    // Optional guard: ignore if already running
-    if (!blinker.active()) {
-      blinker.trigger(NUM_BLINKS);
-    }
+    pg.trigger(3);
   }
 }
