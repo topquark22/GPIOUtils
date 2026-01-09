@@ -18,18 +18,19 @@ static const uint8_t PIN_LED = 5;
 static const uint32_t KICK_PERIOD_MS = 200;
 static const uint32_t TIMEOUT_MS = 800; // must be > KICK_PERIOD_MS
 
+Debounce btn(PIN_BTN, INPUT_PULLUP, 25);
 SoftWatchdog wd(TIMEOUT_MS);
 
 uint32_t lastKickAttemptMs = 0;
 uint32_t lastPrintMs = 0;
 
-void setup()
-{
-  pinMode(PIN_BTN, INPUT_PULLUP);
+void setup() {
+
   pinMode(PIN_LED, OUTPUT);
 
   Serial.begin(115200);
 
+  btn.begin();
   wd.begin();
   lastKickAttemptMs = millis();
   lastPrintMs = millis();
@@ -38,7 +39,7 @@ void setup()
 void loop()
 {
   const uint32_t now = millis();
-  const bool held = (digitalRead(PIN_BTN) == LOW);
+  const bool held = (!btn.read());
 
   // Kick on a schedule unless the button is held down.
   if ((uint32_t)(now - lastKickAttemptMs) >= KICK_PERIOD_MS)
