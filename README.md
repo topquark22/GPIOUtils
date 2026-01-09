@@ -12,7 +12,7 @@ See the full examples index here → [examples/README.md](examples/README.md)
 
 ---
 
-## Design philosophy
+## [Design philosophy](DESIGN.md)
 
 ### 1. Constructors do not touch hardware
 All hardware configuration happens in `begin()`, never in constructors.
