@@ -4,7 +4,7 @@
 #include "debounce.h"
 
 #ifndef GPIOUTILS_PUBLIC_INCLUDE
-#warning "Include <gpioutils.h> instead of including impl/* directly."
+#warning "Include <GPIOUtils.h> instead of including impl/* directly."
 #endif
 
 /**

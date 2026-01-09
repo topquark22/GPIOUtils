@@ -38,7 +38,7 @@ void MultiPress::update() {
 
   const uint32_t now = millis();
 
-  btn_.update();
+  btn_.read();
 
   // If a result is already pending, do not start a new sequence yet.
   if (pending_count_ != 0) {
