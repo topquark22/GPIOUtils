@@ -107,3 +107,6 @@ GPIOUtils provides:
 
 It is designed to quietly remove the small irritations that otherwise clutter
 embedded GPIO code.
+
+GPIOUtils is architecture-agnostic and uses only standard Arduino core APIs.
+Behaviour may vary slightly depending on timing resolution and ADC characteristics of the target board.
