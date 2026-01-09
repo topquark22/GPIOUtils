@@ -27,6 +27,7 @@
 #include "impl/debounce.h"
 #include "impl/edgedetector.h"
 #include "impl/glitchfilter.h"
+#include "impl/multipress.h"
 
 //
 // Event / value-driven utilities (no GPIO ownership)
