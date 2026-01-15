@@ -53,7 +53,7 @@ Pin conventions used by all examples (unless noted):
   Detect rising and falling edges on a clean digital signal.
 
 - **EventLatchBasic**
-  Detects an event and sets a latch. The latch is cleared when read.
+  Detect an event and set a latch. The latch is cleared when read.
 
 - **GlitchFilterBasic**  
   Reject short spikes by requiring a minimum stable time.
