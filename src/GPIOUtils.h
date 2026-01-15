@@ -32,6 +32,7 @@
 //
 // Event / value-driven utilities (no GPIO ownership)
 //
+#include "impl/eventlatch.h"
 #include "impl/oneshot_event.h"
 #include "impl/toggle.h"
 #include "impl/ratelimiter.h"

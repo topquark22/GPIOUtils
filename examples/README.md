@@ -18,7 +18,8 @@ Pin conventions used by all examples (unless noted):
 | voltage divider | INPUT | POT_PIN | A0 |
 | mechanical pushbutton | INPUT_PULLUP | BUTTON_PIN | 2 |
 | digital signal (clean) | INPUT | SIGNAL_PIN | 3 |
-| LED, buzzer etc. | OUTPUT |  LED_PIN | 5 |
+| LED 1 | OUTPUT |  LED_PIN | 5 |
+| LED 2 | OUTPUT |  LED2_PIN | 6 |
 
 ---
 
@@ -50,6 +51,9 @@ Pin conventions used by all examples (unless noted):
 
 - **EdgeDetectorBasic**  
   Detect rising and falling edges on a clean digital signal.
+
+- ** EventLatchBasic**
+  Detects an event and sets a latch. The latch is cleared when read.
 
 - **GlitchFilterBasic**  
   Reject short spikes by requiring a minimum stable time.
