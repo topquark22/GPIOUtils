@@ -52,7 +52,7 @@ Pin conventions used by all examples (unless noted):
 - **EdgeDetectorBasic**  
   Detect rising and falling edges on a clean digital signal.
 
-- ** EventLatchBasic**
+- **EventLatchBasic**
   Detects an event and sets a latch. The latch is cleared when read.
 
 - **GlitchFilterBasic**  
