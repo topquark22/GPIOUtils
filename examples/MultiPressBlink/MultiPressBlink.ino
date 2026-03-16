@@ -1,7 +1,7 @@
 #include <GPIOUtils.h>
 
 /*
-  MultiPressBasic
+  MultiPressBlink
 
   Multi-press the button n times to make the LED blink n times.
 
@@ -9,7 +9,7 @@
     BUTTON_PIN = 2  (wired to GND, INPUT_PULLUP)
     LED_PIN    = 5
 
-  Behavior:
+  Behaviour:
     - MultiPress returns 0 while presses are still occurring
     - After the final quiet gap, it triggers the pulse generator to output n pulses
 */
@@ -57,3 +57,4 @@ void loop() {
 
   digitalWrite(LED_PIN, pg.state() ? HIGH : LOW);
 }
+
