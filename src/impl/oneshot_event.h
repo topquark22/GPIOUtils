@@ -24,6 +24,8 @@ public:
   void reset();
 
   bool is_active() const;
+  bool is_pending() const;
+  
   uint32_t pulse_ms() const;
   void set_pulse_ms(uint32_t ms);
 

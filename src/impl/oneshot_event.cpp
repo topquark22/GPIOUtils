@@ -49,6 +49,10 @@ bool OneShotEvent::is_active() const {
   return state_ == ACTIVE;
 }
 
+bool OneShotEvent::is_pending() const {
+  return state_ == DELAYING;
+}
+
 uint32_t OneShotEvent::pulse_ms() const {
   return pulse_ms_;
 }
