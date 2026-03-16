@@ -29,13 +29,17 @@ void OneShotEvent::trigger() {
 bool OneShotEvent::read() {
   const uint32_t now = millis();
 
-  if (state_ == DELAYING && (now - start_ms_) >= delay_ms_) {
-    state_ = ACTIVE;
-    start_ms_ = now;
+  if (state_ == DELAYING) {
+    if (now - start_ms_ >= delay_ms_) {
+      state_ = ACTIVE;
+      start_ms_ = now;
+    }
   }
 
-  if (state_ == ACTIVE && (now - start_ms_) >= pulse_ms_) {
-    state_ = IDLE;
+  if (state_ == ACTIVE) {
+    if (now - start_ms_ >= pulse_ms_) {
+      state_ = IDLE;
+    }
   }
 
   return state_ == ACTIVE;
