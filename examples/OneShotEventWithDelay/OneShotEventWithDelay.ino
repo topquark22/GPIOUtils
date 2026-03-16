@@ -1,5 +1,5 @@
 /*
-  OneShotEventBasic
+  OneShotEventWithDelay
 
   Demonstrates GPIOUtils::OneShotEvent as a logical (non-GPIO) one-shot,
   with initial activation delay.
@@ -25,8 +25,10 @@ void setup() {
   while (!Serial) { /* wait for USB Serial if needed */ }
 
   Serial.println("OneShotEventWithDelay");
-  Serial.println("Press any key to trigger the one-shot.");
+  Serial.println("Press Enter key to trigger the one-shot.");
 }
+
+bool prev_state = LOW;
 
 void loop() {
   // Trigger the one-shot from a non-GPIO event
@@ -34,11 +36,16 @@ void loop() {
     Serial.read();        // consume one byte
     pulse.trigger();
     Serial.println("Triggered");
+    Serial.println("Delaying 1s");
   }
 
   // Read logical one-shot state
-  if (pulse.read()) {
-    Serial.println("One-shot ACTIVE");
+  if (prev_state == LOW && pulse.read()) {
+    Serial.println("One-shot went HIGH");
+    prev_state = HIGH;
+  } else if (prev_state == HIGH && !pulse.read()) {
+    Serial.println("One-shot went LOW");
+    prev_state = LOW;
   }
 
   // No delay() required; timing is internal

@@ -24,6 +24,8 @@ void setup() {
   Serial.println("Press any key to trigger the one-shot.");
 }
 
+bool prev_state = LOW;
+
 void loop() {
   // Trigger the one-shot from a non-GPIO event
   if (Serial.available()) {
@@ -33,8 +35,12 @@ void loop() {
   }
 
   // Read logical one-shot state
-  if (pulse.read()) {
-    Serial.println("One-shot ACTIVE");
+  if (prev_state == LOW && pulse.read()) {
+    Serial.println("One-shot went HIGH");
+    prev_state = HIGH;
+  } else if (prev_state == HIGH && !pulse.read()) {
+    Serial.println("One-shot went LOW");
+    prev_state = LOW;
   }
 
   // No delay() required; timing is internal
