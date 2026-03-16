@@ -10,6 +10,10 @@
 
 #include <Arduino.h>
 
+#ifndef GPIOUTILS_PUBLIC_INCLUDE
+#warning "Include <GPIOUtils.h> instead of including impl/* directly."
+#endif
+
 class AnalogIntegrator {
 public:
   explicit AnalogIntegrator(float scale = 1.0f);

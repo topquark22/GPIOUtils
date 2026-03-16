@@ -9,6 +9,10 @@
 
 #include <Arduino.h>
 
+#ifndef GPIOUTILS_PUBLIC_INCLUDE
+#warning "Include <GPIOUtils.h> instead of including impl/* directly."
+#endif
+
 class Latch {
 public:
   explicit Latch(bool initial = false);

@@ -2,6 +2,10 @@
 
 #include <Arduino.h>
 
+#ifndef GPIOUTILS_PUBLIC_INCLUDE
+#warning "Include <GPIOUtils.h> instead of including impl/* directly."
+#endif
+
 /**
  * @brief A tiny read-to-clear event latch.
  *
