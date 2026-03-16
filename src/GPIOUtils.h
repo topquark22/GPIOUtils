@@ -4,7 +4,7 @@
 
   Users should include ONLY this file:
 
-      #include <gpioutils.h>
+      #include <GPIOUtils.h>
 
   All implementation headers live under src/impl/.
 */
