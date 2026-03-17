@@ -1,58 +1,190 @@
 # GPIOUtils
 
-**GPIOUtils** is a small, focused Arduino utility library for cleaning up common
-GPIO annoyances: noise, bounce, jitter, awkward timing logic, and state handling.
+**GPIOUtils** is a lightweight, composable toolkit for writing clean, non-blocking Arduino code.
 
-It is intentionally **not a framework**.
-Each component does *one thing*, is easy to reason about, and composes cleanly
-with the others.
+It solves the small but persistent problems that make embedded code messy:
+- switch bounce
+- noisy analog signals
+- timing logic scattered everywhere
+- awkward state machines
+- one-off hacks that don’t scale
 
-📘 **Examples and usage:**  
-See the full examples index here → [examples/README.md](examples/README.md)
-
----
-
-## [Design philosophy](DESIGN.md)
-
-### 1. Constructors do not touch hardware
-All hardware configuration happens in `begin()`, never in constructors.
-This allows:
-- safe global/static instantiation
-- predictable initialization order
-- no hidden side effects
-
-### 2. GPIO ownership implies `begin()`
-If a class **owns a GPIO pin**, it:
-- takes the pin in the constructor
-- performs `pinMode()` in `begin()`
-
-If a class does **not** touch GPIO, it never calls `pinMode()`.
-
-### 3. Composition over specialization
-Instead of large monolithic helpers, GPIOUtils provides small orthogonal
-building blocks meant to be chained:
-
-```
-GPIO → conditioner → event/value → timing/state → output
-```
-
-Higher-level behaviors are deliberately documented rather than encoded
-as extra classes.
+Instead of monolithic frameworks, GPIOUtils gives you **small building blocks** that snap together cleanly.
 
 ---
 
-## Library structure
+## 🚀 What this library actually lets you do
+
+With a few simple components, you can build behavior like:
+
+- A button with **debounce + long-press + auto-repeat**
+- An analog input with **noise suppression + hysteresis**
+- A clean event pipeline like:
+
+```
+button → debounce → edge → long-press → one-shot → timed output
+```
+
+- Non-blocking timing like:
+  - periodic tasks
+  - pulse generation
+  - delayed triggers
+  - rate-limited signals
+
+All without `delay()` and without tangled logic.
+
+---
+
+## 🧩 Design philosophy
+
+GPIOUtils follows a few strict rules:
+
+### 1. No hidden side effects
+Constructors never touch hardware.  
+All setup happens explicitly in:
+
+```cpp
+begin();
+```
+
+---
+
+### 2. Clear ownership of pins
+- If a class owns a pin → it configures it  
+- If it doesn’t → it never touches hardware
+
+---
+
+### 3. Composition over complexity
+
+Instead of giant helper classes, everything is designed to chain:
+
+```
+raw input → conditioning → event → timing → output
+```
+
+You build exactly what you need—nothing more.
+
+---
+
+## 📦 Components overview
+
+### 🔹 Analog conditioning
+
+- **AnalogCalibrator**  
+  Fix real-world ADC range issues (inputs that don’t hit full scale)
+
+- **Dejitter**  
+  Removes small analog noise (deadband filtering)
+
+- **Schmitt**  
+  Converts noisy analog signals into stable digital states (hysteresis)
+
+---
+
+### 🔹 Digital input cleanup
+
+- **Debounce**  
+  Clean up mechanical switches
+
+- **EdgeDetector**  
+  Detect rising/falling edges cleanly
+
+- **GlitchFilter**  
+  Reject short spikes and false triggers
+
+---
+
+### 🔹 Event & timing logic (no GPIO required)
+
+- **OneShotEvent**  
+  Fire a fixed-duration event (optionally delayed)
+
+- **PulseGenerator**  
+  Generate pulse trains (finite or continuous)
+
+- **AutoRepeat**  
+  Keyboard-style repeating input
+
+- **MultiPress**  
+  Detect double/triple clicks
+
+- **LongPressDetector**  
+  Detect press-and-hold actions
+
+- **Toggle**  
+  Convert events into persistent state
+
+- **RateLimiter**  
+  Smooth or constrain value changes
+
+- **PeriodicTimer**  
+  Generate regular ticks without blocking
+
+---
+
+### 🔹 Output control
+
+- **TimedOutput** *(owns a pin)*  
+  Drive outputs with:
+  - timed pulses
+  - scheduled transitions
+  - non-blocking control
+
+---
+
+### 🔹 Utility helpers
+
+- `adcToU8()` → ADC → 8-bit  
+- `adcToFloat()` → normalized  
+- `adcToFloat(min, max)` → scaled range  
+
+---
+
+## 🧠 Example: clean, readable logic
+
+Instead of tangled code:
+
+```cpp
+if (buttonPressed && !lastState && millis() - lastTime > 50) { ... }
+```
+
+You get:
+
+```cpp
+Debounce button(2);
+EdgeDetector edge;
+OneShotEvent pulse(1000);
+
+void loop() {
+    bool clean = button.update();
+    if (edge.rising(clean)) {
+        pulse.trigger();
+    }
+
+    if (pulse.update()) {
+        digitalWrite(LED_PIN, HIGH);
+    } else {
+        digitalWrite(LED_PIN, LOW);
+    }
+}
+```
+
+Readable. Testable. Composable.
+
+---
+
+## 📁 Structure
 
 ```
 GPIOUtils/
   src/
-    GPIOUtils.h          // the only public header
-    impl/                // internal headers and sources
+    GPIOUtils.h
+    impl/
   examples/
-    README.md            // example index (recommended starting point)
 ```
 
-Users should **only include**:
+Only include:
 
 ```cpp
 #include <GPIOUtils.h>
@@ -60,95 +192,23 @@ Users should **only include**:
 
 ---
 
-## Components
+## 📘 Examples
 
-GPIOUtils provides small, focused building blocks for common GPIO-related patterns.  
-Most components are **logic-only** and do not own pins unless explicitly stated.
-
----
-
-### Analog input utilities
-
-- **AnalogCalibrator**  
-  Normalizes ADC readings when real-world inputs do not reach the rails (0 or full scale).
-
-- **Dejitter**  
-  Suppresses small analog noise using a configurable deadband.
-
-- **Schmitt**  
-  Applies hysteresis to convert noisy analog signals into stable digital decisions.
+Start here:  
+👉 `examples/README.md`
 
 ---
 
-### Digital input utilities
+## 🎯 Why use GPIOUtils?
 
-- **Debounce**  
-  Filters mechanical switch bounce and provides clean edge events.
-
-- **EdgeDetector**  
-  Detects rising and falling edges on a clean digital signal.
-
-- **GlitchFilter**  
-  Rejects short, spurious pulses by requiring a minimum stable duration.
+- No blocking (`delay()`-free)
+- No frameworks or magic
+- Small, focused components
+- Easy to reason about
+- Works on any Arduino-compatible board
 
 ---
 
-### Event and value utilities (logic only)
+## ⚙️ Philosophy in one sentence
 
-- **OneShotEvent**  
-  Generates a fixed-duration logical event when triggered.
-
-- **PulseGenerator**  
-  Produces finite or continuous pulse trains with configurable on/off timing.
-
-- **AutoRepeat**  
-  Emits repeated events while an input remains active (keyboard-style repeat).
-
-- **MultiPress**  
-  Detects single, double, or multi-press gestures after a quiet interval.
-
-- **LongPressDetector**  
-  Detects press-and-hold gestures exceeding a specified duration.
-
-- **Toggle**  
-  Maintains a toggled state driven by discrete events.
-
-- **RateLimiter**  
-  Limits how fast a value may change over time (slew-rate control).
-
-- **PeriodicTimer**  
-  Generates periodic “tick” events at a fixed interval.
-
----
-
-### Digital output utilities
-
-- **TimedOutput**  
-  Owns a GPIO output pin and supports scheduled pulses and timed state changes.
-
----
-
-### Inline helper functions
-
-Convenience functions for converting raw ADC readings into normalized or scaled values.
-
-
-- `adcToU8()` — ADC → 8-bit conversion with rounding
-- `adcToFloat()` — ADC → normalized float
-- `adcToFloat(min, max)` — ADC → arbitrary float range
-
----
-
-## Summary
-
-GPIOUtils provides:
-- small, predictable components
-- explicit hardware ownership
-- no hidden side effects
-- clean composition instead of feature bloat
-
-It is designed to quietly remove the small irritations that otherwise clutter
-embedded GPIO code.
-
-GPIOUtils is architecture-agnostic and uses only standard Arduino core APIs.
-Behaviour may vary slightly depending on timing resolution and ADC characteristics of the target board.
+> “Do one thing well, and compose everything else.”
