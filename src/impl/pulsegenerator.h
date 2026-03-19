@@ -48,7 +48,6 @@ public:
   bool fell() const { return fell_; }
 
 private:
-  void start_internal_(bool start_high, int num_cycles);
 
   uint32_t on_ms_;
   uint32_t off_ms_;
