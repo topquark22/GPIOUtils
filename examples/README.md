@@ -27,82 +27,79 @@ Pin conventions used by all examples (unless noted):
 
 ### Analog & signal conditioning
 
-- **AnalogCalibratorBasic**  
+- **[AnalogCalibratorBasic](./AnalogCalibratorBasic)**  
   Normalize and remap real-world ADC readings that don’t reach 0 or full scale.
 
-- **AnalogDejitterRead**  
+- **[AnalogDejitterRead](./AnalogDejitterRead)**  
   Remove small analog noise using a deadband and observe the effect via Serial output.
 
-- **AnalogIntegratorBasic**  
+- **[AnalogIntegratorBasic](./AnalogIntegratorBasic)**  
   Integrate a normalized analog signal over time (“area under the curve”).
 
-- **DejitterBasic**  
+- **[DejitterBasic](./DejitterBasic)**  
   Side-by-side comparison of raw vs dejittered ADC readings.
 
-- **SchmittAnalogThreshold**  
+- **[SchmittAnalogThreshold](./SchmittAnalogThreshold)**  
   Convert a noisy analog signal into a stable digital decision using hysteresis.
 
 ---
 
 ### Buttons, edges, and gestures
 
-- **DebounceBasic**  
+- **[DebounceBasic](./DebounceBasic)**  
   Clean a mechanical button and trigger an action once per press.
 
-- **EdgeDetectorBasic**  
+- **[EdgeDetectorBasic](./EdgeDetectorBasic)**  
   Detect rising and falling edges on a clean digital signal.
 
-- **EventLatchBasic**
+- **[EventLatchBasic](./EventLatchBasic)**
   Detect an event and set a latch. The latch is cleared when read.
 
-- **GlitchFilterBasic**  
+- **[GlitchFilterBasic](./GlitchFilterBasic)**  
   Reject short spikes by requiring a minimum stable time.
 
-- **LongPressDetectorBasic**  
+- **[LongPressDetectorBasic](./LongPressDetectorBasic)**  
   Detect press-and-hold gestures (long press vs short press).
 
-- **MultiPressBasic**  
+- **[MultiPressBasic](./MultiPressBasic)**  
   Count multiple quick presses (single, double, triple, etc.) and act once.
 
-- **ToggleOnPress**  
+- **[ToggleOnPress](./ToggleOnPress)**  
   Toggle a remembered state on each button press.
 
 ---
 
 ### Timing, pulses, and rate control
 
-- **PeriodicTimerBlink**  
+- **[PeriodicTimerBlink](./PeriodicTimerBlink)**  
   Blink an LED at a fixed rate without using `delay()`.
 
-- **ButtonHeldBlink**  
-  Blink an LED while a button is held down, combining debouncing with a periodic timer.
-
-- **PulseGeneratorBlink**  
+- **[PulseGeneratorBlink](./PulseGeneratorBlink)**  
   Generate a finite blink pattern (N blinks) triggered by a button.
 
-- **PulseStretcherButtonToLED**  
+- **[PulseStretcherButtonToLED](./PulseStretcherButtonToLED)**  
   Stretch a brief button press into a guaranteed-visible output pulse.
 
-- **OneShotEventBasic**  
+- **[OneShotEventBasic](./OneShotEventBasic)**  
   Trigger a fixed-duration logical event from any source (Serial in this example).
 
-- **TimedOutputPulse**  
+- **[TimedOutputPulse](./TimedOutputPulse)**  
   Schedule timed pulses while letting a class own the output pin.
 
-- **RateLimiterRampPWM**  
+- **[RateLimiterRampPWM](./RateLimiterRampPWM)**  
   Smooth how fast a value changes (slew-rate limiting), not just noise.
 
 ---
 
 ### Control & safety patterns
 
-- **AutoRepeatBasic**  
+- **[AutoRepeatBasic](./AutoRepeatBasic)**  
   Keyboard-style auto-repeat behavior when holding a button.
 
-- **LatchBasic**  
+- **[LatchBasic](./LatchBasic)**  
   Classic SET / RESET latch using two buttons.
 
-- **SoftWatchdogBasic**  
+- **[SoftWatchdogBasic](./SoftWatchdogBasic)**  
   Detect stalled logic by requiring periodic “kicks.”
 
 ---
