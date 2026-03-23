@@ -46,6 +46,9 @@ Pin conventions used by all examples (unless noted):
 
 ### Buttons, edges, and gestures
 
+- **[ButtonHeldBlink](./ButtonHeldBlink)**
+  Blink an LED while a button is held down, combining debouncing with a periodic timer.
+
 - **[DebounceBasic](./DebounceBasic)**  
   Clean a mechanical button and trigger an action once per press.
 
