@@ -74,6 +74,9 @@ Pin conventions used by all examples (unless noted):
 - **PeriodicTimerBlink**  
   Blink an LED at a fixed rate without using `delay()`.
 
+- **ButtonHeldBlink**  
+  Blink an LED while a button is held down, combining debouncing with a periodic timer.
+
 - **PulseGeneratorBlink**  
   Generate a finite blink pattern (N blinks) triggered by a button.
 
