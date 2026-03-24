@@ -1,8 +1,9 @@
 #include <GPIOUtils.h>
 
+const uint8_t PIN_POT = A0;
 const uint8_t PIN_LED = 5;
 
-Schmitt sch(A0, 480, 540);
+Schmitt sch(PIN_POT, 400, 600);
 
 void setup() {
   pinMode(PIN_LED, OUTPUT);
