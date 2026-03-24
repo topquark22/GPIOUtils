@@ -1,6 +1,6 @@
 #include <GPIOUtils.h>
 
-constexpr uint8_t LED_PIN = 2;
+constexpr uint8_t LED_PIN = 5;
 
 constexpr uint32_t PERIOD_MS = 500;
 

@@ -16,7 +16,7 @@ Demonstrates `PeriodicTimer`, a simple periodic tick source. This example uses i
 
 ## Wiring
 
-- No external wiring required (uses `LED_BUILTIN`).
+- External LED on pin 5
 
 ---
 
