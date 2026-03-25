@@ -22,10 +22,10 @@ void setup() {
 
 void loop() {
 
-  // active-low button
-  const bool pressed = !button.read(); 
+  // active-low button pressed condition
+  const bool condition = !button.read(); 
 
-  if (!pressed) {
+  if (!condition) {
   // Button not held: LED remains off.
     digitalWrite(LED_PIN, LOW);
   } else {
