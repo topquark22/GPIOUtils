@@ -12,8 +12,6 @@ Debounce button(BUTTON_PIN, INPUT_PULLUP, DEBOUNCE_MS);
 // Blink timer: toggles LED state every 250 ms while button is held.
 PeriodicTimer blink(BLINK_MS);
 
-bool led_state = false;
-
 void setup() {
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, LOW);
@@ -33,7 +31,6 @@ void loop() {
   } else {
   // While button is held, blink continuously.
     if (blink.tick()) {
-      led_state = !led_state;
       digitalWrite(LED_PIN, !digitalRead(LED_PIN));
     }
   }
