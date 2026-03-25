@@ -15,27 +15,29 @@ PeriodicTimer blink(BLINK_MS);
 bool led_state = false;
 
 void setup() {
-    pinMode(LED_PIN, OUTPUT);
-    digitalWrite(LED_PIN, LOW);
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, LOW);
 
-    button.begin();
-    blink.start();
+  button.begin();
+  blink.start();
 }
 
 void loop() {
-    // Update debounced button state.
-    const bool pressed = (button.read() == LOW);
 
-    if (!pressed) {
-        // Button not held: LED remains off.
-        led_state = false;
-        digitalWrite(LED_PIN, LOW);
-        return;
-    }
+  // active-low button
+  const bool pressed = !button.read(); 
 
-    // While button is held, blink continuously.
+  if (!pressed) {
+  // Button not held: LED remains off.
+    digitalWrite(LED_PIN, LOW);
+  } else {
+  // While button is held, blink continuously.
     if (blink.tick()) {
-        led_state = !led_state;
-        digitalWrite(LED_PIN, led_state ? HIGH : LOW);
+      led_state = !led_state;
+      digitalWrite(LED_PIN, !digitalRead(LED_PIN));
     }
+  }
+
+  // Do something else...
+
 }
