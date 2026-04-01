@@ -167,6 +167,8 @@ void loop() {
     } else {
         digitalWrite(LED_PIN, LOW);
     }
+
+    // Do something else (nonblocking) ...
 }
 ```
 
