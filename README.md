@@ -15,7 +15,7 @@ Instead of monolithic frameworks, GPIOUtils gives you **small building blocks** 
 
 ## 🚀 What this library actually lets you do
 
-With a few simple components, you can build behavior like:
+With a few simple components, you can build behaviour like:
 
 - A button with **debounce + long-press + auto-repeat**
 - An analog input with **noise suppression + hysteresis**
