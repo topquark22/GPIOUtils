@@ -109,7 +109,7 @@ Pin conventions used by all examples (unless noted):
 
 ## How to use these examples
 
-1. Pick the example closest to your problem.
+1. Pick the example closest to your use case.
 2. Read its `README.md` first — behavior and intent are documented there.
 3. Open the `.ino` file and scan it top to bottom.
 4. Copy the pattern, not necessarily the entire sketch.
