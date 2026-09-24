@@ -194,10 +194,7 @@ Only include:
 
 ---
 
-## 📘 Examples
-
-Start here:  
-👉 `examples/README.md`
+## 📘 [Examples](examples/README.md)
 
 ---
 
