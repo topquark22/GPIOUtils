@@ -176,6 +176,10 @@ Readable. Testable. Composable.
 
 ---
 
+## 📘 [All examples](examples/README.md)
+
+---
+
 ## 📁 Structure
 
 ```
@@ -191,12 +195,6 @@ Only include:
 ```cpp
 #include <GPIOUtils.h>
 ```
-
----
-
-## 📘 [Examples](examples/README.md)
-
----
 
 ## 🎯 Why use GPIOUtils?
 
