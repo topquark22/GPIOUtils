@@ -143,6 +143,8 @@ You build exactly what you need—nothing more.
 
 ## 📘 [All examples](examples/README.md)
 
+---
+
 ## 🧠 Example: clean, readable logic
 
 Instead of tangled code:
